@@ -1,0 +1,39 @@
+const express = require("express");
+const { Op } = require("sequelize");
+const bcrypt = require("bcryptjs");
+const router = express.Router();
+
+const { setTokenCookie, restoreUser } = require("../../utils/auth");
+const { User } = require("../../db/models");
+
+router.post("/", async (req, res, next) => {
+  const { credential, password } = req.body;
+  const user = await User.unscoped().findOne({
+    where: {
+      [Op.or]: {
+        email: credential,
+        username: credential,
+      },
+    },
+  });
+
+  if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
+    const err = new Error("Login failed");
+    err.status = 401;
+    err.title = "Login failed";
+    err.errors = { credential: "The provided credentials were invalid." };
+    return next(err);
+  }
+
+  const safeUser = {
+    id: user.id,
+    email: user.email,
+    username: user.username,
+  };
+
+  return res.json({
+    user: safeUser,
+  });
+});
+
+module.exports = router;
