@@ -9,19 +9,19 @@ options.tableName = "Users";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.addColumn(options, "Users", "firstName", {
+    await queryInterface.addColumn(options, "firstName", {
       type: Sequelize.STRING(30),
       allowNull: false,
     });
 
-    await queryInterface.addColumn(options, "Users", "lastName", {
+    await queryInterface.addColumn(options, "lastName", {
       type: Sequelize.STRING(30),
       allowNull: false,
     });
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn(options, "Users", "firstName");
-    await queryInterface.removeColumn(options, "Users", "lastName");
+    await queryInterface.removeColumn(options, "firstName");
+    await queryInterface.removeColumn(options, "lastName");
   },
 };
