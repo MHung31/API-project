@@ -72,20 +72,25 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 //   return res.json({ message: "success" });
 // });
 
-router.get("/", requireAuth, (req, res) => {
-  const { user } = req;
-  if (user) {
-    const safeUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
-    return res.json({
-      user: safeUser,
-    });
-  } else return res.json({ user: null });
+// router.get("/current", requireAuth, async (req, res) => {
+//   const { user } = req;
+//   if (user) {
+//     const currentSpots = await Spot.findAll({
+//       where: {
+//         ownerId: user.id,
+//       },
+//     });
+
+//     return res.json(currentSpots);
+//   }
+// });
+
+router.get("/", async (req, res) => {
+    //add avgRating, calculated from reviews table
+    //addpreviewImage, pulled from images table
+  const currentSpots = await Spot.findAll();
+
+  return res.json({ Spots: currentSpots });
 });
 
 module.exports = router;
