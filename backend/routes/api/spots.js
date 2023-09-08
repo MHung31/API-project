@@ -85,9 +85,10 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 //   }
 // });
 
+//Pending review and image table creation
 router.get("/", async (req, res) => {
-    //add avgRating, calculated from reviews table
-    //addpreviewImage, pulled from images table
+  //add avgRating, calculated from reviews table
+  //addpreviewImage, pulled from images table
   const currentSpots = await Spot.findAll();
 
   return res.json({ Spots: currentSpots });
