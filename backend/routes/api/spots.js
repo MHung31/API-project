@@ -8,7 +8,7 @@ const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { Spot } = require("../../db/models");
+const { Spot, Review } = require("../../db/models");
 
 const validateCreateSpot = [
   check("address")
@@ -42,6 +42,54 @@ const validateCreateSpot = [
   handleValidationErrors,
 ];
 
+const validateCreateReview = [
+  check("review")
+    .exists({ checkFalsy: true })
+    .withMessage("Review text is required"),
+  check("stars")
+    .exists({ checkFalsy: true })
+    .isInt({
+      min: 1,
+      max: 5,
+    })
+    .withMessage("Stars must be an integer from 1 to 5"),
+  handleValidationErrors,
+];
+
+//create a review for a spot
+router.post(
+  "/:spotId/reviews",
+  requireAuth,
+  validateCreateReview,
+  async (req, res, next) => {
+    let { review, stars } = req.body;
+    const spotId = Number(req.params.spotId);
+    const { user } = req;
+    stars = Number(stars);
+
+    if (!(await Spot.findByPk(spotId))) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      next(err);
+    }
+    if (await Review.findOne({ where: { userId: user.id, spotId } })) {
+      const err = new Error("User already has a review for this spot");
+      err.status = 500;
+      next(err);
+    }
+
+    const newReview = await Review.create({
+      userId: user.id,
+      spotId,
+      review,
+      stars,
+    });
+
+    return res.status(201).json(newReview);
+  }
+);
+
+//Create a spot
 router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   let { address, city, state, country, lat, lng, name, description, price } =
     req.body;
@@ -72,20 +120,26 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 //   return res.json({ message: "success" });
 // });
 
-router.get("/", requireAuth, (req, res) => {
-  const { user } = req;
-  if (user) {
-    const safeUser = {
-      id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      username: user.username,
-    };
-    return res.json({
-      user: safeUser,
-    });
-  } else return res.json({ user: null });
+// router.get("/current", requireAuth, async (req, res) => {
+//   const { user } = req;
+//   if (user) {
+//     const currentSpots = await Spot.findAll({
+//       where: {
+//         ownerId: user.id,
+//       },
+//     });
+
+//     return res.json(currentSpots);
+//   }
+// });
+
+//Pending reviews and images table creation
+router.get("/", async (req, res) => {
+  //add avgRating, calculated from reviews table
+  //add previewImage, pulled from images table
+  const currentSpots = await Spot.findAll();
+
+  return res.json({ Spots: currentSpots });
 });
 
 module.exports = router;
