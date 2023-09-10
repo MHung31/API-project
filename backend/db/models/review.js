@@ -14,6 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       Review.belongsTo(models.Spot, {
         foreignKey: "spotId",
       });
+
+      Review.hasMany(models.Image, {
+        foreignKey: "ImageableId",
+        constraints: false,
+        scope: {
+          imageableType: "Review",
+        },
+      });
     }
   }
   Review.init(
@@ -34,8 +42,8 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           isInt: true,
           min: 1,
-          max: 5
-        }
+          max: 5,
+        },
       },
     },
     {

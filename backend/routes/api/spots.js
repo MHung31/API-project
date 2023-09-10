@@ -8,7 +8,7 @@ const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { Spot, Review, Booking, User } = require("../../db/models");
+const { Spot, Review, Booking, User, Image } = require("../../db/models");
 
 const validateCreateSpot = [
   check("address")
@@ -68,6 +68,38 @@ const validateBooking = [
   handleValidationErrors,
 ];
 
+//Add image to post
+router.post("/:spotId/images", requireAuth, async (req, res, next) => {
+  const { url, preview } = req.body;
+  const spotId = Number(req.params.spotId);
+  const { user } = req;
+
+  const currSpot = await Spot.findByPk(spotId);
+
+  if (!currSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+  if (currSpot.ownerId !== user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  }
+
+  const spotImage = await Image.create({
+    url,
+    preview,
+    imageableId: spotId,
+    imageableType: "Spot",
+  });
+  return res.json({
+    id: spotImage.id,
+    url: spotImage.url,
+    preview: spotImage.preview,
+  });
+});
+
 //Create a Booking
 router.post(
   "/:spotId/bookings",
@@ -81,7 +113,7 @@ router.post(
     if (!(await Spot.findByPk(spotId))) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
-      next(err);
+      return next(err);
     }
 
     const bookedDates = await Booking.findAll({
@@ -113,7 +145,7 @@ router.post(
         err.errors = {
           startDate: "Start date conflicts with an existing booking",
         };
-        next(err);
+        return next(err);
       }
 
       if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
@@ -124,7 +156,7 @@ router.post(
         err.errors = {
           endDate: "End date conflicts with an existing booking",
         };
-        next(err);
+        return next(err);
       }
     });
 
@@ -153,12 +185,12 @@ router.post(
     if (!(await Spot.findByPk(spotId))) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
-      next(err);
+      return next(err);
     }
     if (await Review.findOne({ where: { userId: user.id, spotId } })) {
       const err = new Error("User already has a review for this spot");
       err.status = 500;
-      next(err);
+      return next(err);
     }
 
     const newReview = await Review.create({
