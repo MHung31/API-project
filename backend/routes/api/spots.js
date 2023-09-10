@@ -79,12 +79,12 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   if (!currSpot) {
     const err = new Error("Spot couldn't be found");
     err.status = 404;
-    next(err);
+    return next(err);
   }
   if (currSpot.ownerId !== user.id) {
     const err = new Error("Forbidden");
     err.status = 403;
-    next(err);
+    return next(err);
   }
 
   const spotImage = await Image.create({
@@ -113,7 +113,7 @@ router.post(
     if (!(await Spot.findByPk(spotId))) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
-      next(err);
+      return next(err);
     }
 
     const bookedDates = await Booking.findAll({
@@ -145,7 +145,7 @@ router.post(
         err.errors = {
           startDate: "Start date conflicts with an existing booking",
         };
-        next(err);
+        return next(err);
       }
 
       if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
@@ -156,7 +156,7 @@ router.post(
         err.errors = {
           endDate: "End date conflicts with an existing booking",
         };
-        next(err);
+        return next(err);
       }
     });
 
@@ -185,12 +185,12 @@ router.post(
     if (!(await Spot.findByPk(spotId))) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
-      next(err);
+      return next(err);
     }
     if (await Review.findOne({ where: { userId: user.id, spotId } })) {
       const err = new Error("User already has a review for this spot");
       err.status = 500;
-      next(err);
+      return next(err);
     }
 
     const newReview = await Review.create({
