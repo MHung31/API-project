@@ -9,6 +9,16 @@ module.exports = {
     logQueryParameters: true,
     typeValidation: true,
   },
+  //switch production to check production items
+  //Switch package.json production to nodemon so changes in code will restart server
+  // production: {
+  //   storage: config.dbFile,
+  //   dialect: "sqlite",
+  //   seederStorage: "sequelize",
+  //   logQueryParameters: true,
+  //   typeValidation: true,
+  // },
+
   production: {
     use_env_variable: "DATABASE_URL",
     dialect: "postgres",

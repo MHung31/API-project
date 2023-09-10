@@ -8,7 +8,7 @@ const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { Spot, Review } = require("../../db/models");
+const { Spot, Review, Booking, User } = require("../../db/models");
 
 const validateCreateSpot = [
   check("address")
@@ -55,6 +55,89 @@ const validateCreateReview = [
     .withMessage("Stars must be an integer from 1 to 5"),
   handleValidationErrors,
 ];
+
+const validateBooking = [
+  check("startDate")
+    .exists({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("Enter a valid start date YYYY-MM-DD"),
+  check("endDate")
+    .exists({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("Enter a valid end date YYYY-MM-DD"),
+  handleValidationErrors,
+];
+
+//Create a Booking
+router.post(
+  "/:spotId/bookings",
+  requireAuth,
+  validateBooking,
+  async (req, res, next) => {
+    let { startDate, endDate } = req.body;
+    const { user } = req;
+    const spotId = Number(req.params.spotId);
+
+    if (!(await Spot.findByPk(spotId))) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      next(err);
+    }
+
+    const bookedDates = await Booking.findAll({
+      where: {
+        spotId,
+
+        [Op.or]: [
+          {
+            startDate: {
+              [Op.gte]: startDate,
+            },
+          },
+          {
+            endDate: { [Op.lte]: endDate },
+          },
+        ],
+      },
+    });
+    //start         startDate        endDate        end
+    bookedDates.forEach((booking) => {
+      const start = new Date(booking.startDate);
+      const end = new Date(booking.endDate);
+      console.log(start, startDate, endDate, end);
+      if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
+        const err = new Error(
+          "Sorry, this spot is already booked for the specified dates"
+        );
+        err.status = 403;
+        err.errors = {
+          startDate: "Start date conflicts with an existing booking",
+        };
+        next(err);
+      }
+
+      if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
+        const err = new Error(
+          "Sorry, this spot is already booked for the specified dates"
+        );
+        err.status = 403;
+        err.errors = {
+          endDate: "End date conflicts with an existing booking",
+        };
+        next(err);
+      }
+    });
+
+    const newBooking = await Booking.create({
+      userId: user.id,
+      spotId,
+      startDate,
+      endDate,
+    });
+
+    return res.status(201).json(newBooking);
+  }
+);
 
 //create a review for a spot
 router.post(
