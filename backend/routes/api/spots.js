@@ -204,6 +204,44 @@ router.post(
   }
 );
 
+//edit a spot
+router.put(
+  "/:spotId",
+  requireAuth,
+  validateCreateSpot,
+  async (req, res, next) => {
+    const spotId = Number(req.params.spotId);
+
+    const { user } = req;
+
+    req.body.lat = Number(req.body.lat);
+    req.body.lng = Number(req.body.lng);
+    req.body.price = Number(req.body.price);
+
+    const currSpot = await Spot.findByPk(spotId);
+
+    if (currSpot.ownerId !== user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      return next(err);
+    }
+
+    if (!currSpot) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      return next(err);
+    }
+
+    for (let key in req.body) {
+      currSpot.dataValues[key] = req.body[key];
+    }
+    currSpot.dataValues.updatedAt = new Date();
+    await currSpot.save();
+
+    return res.json(currSpot);
+  }
+);
+
 //Create a spot
 router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   let { address, city, state, country, lat, lng, name, description, price } =
