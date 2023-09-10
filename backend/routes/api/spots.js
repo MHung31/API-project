@@ -8,7 +8,7 @@ const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { Spot, Review, Booking, User } = require("../../db/models");
+const { Spot, Review, Booking, User, Image } = require("../../db/models");
 
 const validateCreateSpot = [
   check("address")
@@ -67,6 +67,38 @@ const validateBooking = [
     .withMessage("Enter a valid end date YYYY-MM-DD"),
   handleValidationErrors,
 ];
+
+//Add image to post
+router.post("/:spotId/images", requireAuth, async (req, res, next) => {
+  const { url, preview } = req.body;
+  const spotId = Number(req.params.spotId);
+  const { user } = req;
+
+  const currSpot = await Spot.findByPk(spotId);
+
+  if (!currSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    next(err);
+  }
+  if (currSpot.ownerId !== user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    next(err);
+  }
+
+  const spotImage = await Image.create({
+    url,
+    preview,
+    imageableId: spotId,
+    imageableType: "Spot",
+  });
+  return res.json({
+    id: spotImage.id,
+    url: spotImage.url,
+    preview: spotImage.preview,
+  });
+});
 
 //Create a Booking
 router.post(
