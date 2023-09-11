@@ -70,7 +70,7 @@ const validateBooking = [
 
 //Add image to post
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
-  const { url, preview } = req.body;
+  let { url, preview } = req.body;
   const spotId = Number(req.params.spotId);
   const { user } = req;
 
@@ -86,6 +86,36 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     err.status = 403;
     return next(err);
   }
+
+  //TODO: Image Preview changes depending on situations
+  //Requires currSpot to include images when pulling
+  //If no images exist, first image preview has to be true
+  //if preview is true, then old true image turns false
+  //if preview is false, and previous image has true, preview can stay false
+
+  // const currSpotImage = await Spot.findByPk(spotId, {
+  //   include: {
+  //     model: Image,
+  //     where: {
+  //       preview: true,
+  //     },
+  //   },
+  // });
+
+  // // console.log(currSpotImage)
+
+  // if (!currSpotImage) {
+  //   preview = true;
+  // } else if (preview === true) {
+  //   currSpotImage.Images[0].preview = false;
+  //   currSpotImage.save();
+  // }
+  // const currSpotImages = await Spot.findByPk(spotId, {
+  //   include: {
+  //     model: Image,
+  //   },
+  // });
+  // console.log(currSpotImages.Images);
 
   const spotImage = await Image.create({
     url,
@@ -211,7 +241,6 @@ router.put(
   validateCreateSpot,
   async (req, res, next) => {
     const spotId = Number(req.params.spotId);
-
     const { user } = req;
 
     req.body.lat = Number(req.body.lat);
@@ -220,22 +249,20 @@ router.put(
 
     const currSpot = await Spot.findByPk(spotId);
 
+    if (!currSpot) {
+      const err = new Error("Spot couldn't be found");
+      err.status = 404;
+      return next(err);
+    }
     if (currSpot.ownerId !== user.id) {
       const err = new Error("Forbidden");
       err.status = 403;
       return next(err);
     }
 
-    if (!currSpot) {
-      const err = new Error("Spot couldn't be found");
-      err.status = 404;
-      return next(err);
-    }
-
     for (let key in req.body) {
-      currSpot.dataValues[key] = req.body[key];
+      currSpot[key] = req.body[key];
     }
-    currSpot.dataValues.updatedAt = new Date();
     await currSpot.save();
 
     return res.json(currSpot);
