@@ -146,10 +146,16 @@ router.post(
     let { startDate, endDate } = req.body;
     const { user } = req;
     const spotId = Number(req.params.spotId);
-
-    if (!(await Spot.findByPk(spotId))) {
+    const currSpot = await Spot.findByPk(spotId);
+    if (!currSpot) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
+      return next(err);
+    }
+
+    if (currSpot.ownerId === user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
       return next(err);
     }
 
@@ -173,7 +179,6 @@ router.post(
     bookedDates.forEach((booking) => {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
-      console.log(start, startDate, endDate, end);
       if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
         const err = new Error(
           "Sorry, this spot is already booked for the specified dates"
@@ -320,7 +325,7 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
     err.status = 403;
     return next(err);
   }
-  console.log("hello----------", currSpot)
+  console.log("hello----------", currSpot);
   await currSpot.destroy();
 
   return res.json({ message: "Successfully deleted" });
