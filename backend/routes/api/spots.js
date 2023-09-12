@@ -8,7 +8,14 @@ const { requireAuth } = require("../../utils/auth");
 const router = express.Router();
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { Spot, Review, Booking, User, Image } = require("../../db/models");
+const {
+  Spot,
+  Review,
+  Booking,
+  User,
+  Image,
+  sequelize,
+} = require("../../db/models");
 
 const validateCreateSpot = [
   check("address")
@@ -317,9 +324,65 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 router.get("/", async (req, res) => {
   //add avgRating, calculated from reviews table
   //add previewImage, pulled from images table
-  const currentSpots = await Spot.findAll();
+  const currentSpots = await Spot.findAll({
+    include: [{ model: Review }, { model: Image }],
+  });
 
-  return res.json({ Spots: currentSpots });
+  let updatedSpots = currentSpots.map((spot) => {
+    const {
+      id,
+      ownerId,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+      createdAt,
+      updatedAt,
+    } = spot;
+    let avgRating;
+    let imagePreview;
+    if (!spot.Reviews.length) {
+      avgRating = "There are currently no reviews for this spot";
+    } else {
+      let sum = 0;
+      spot.Reviews.forEach((review) => {
+        sum += review.stars;
+      });
+      avgRating = Math.round((sum / spot.Reviews.length) * 10) / 10;
+    }
+
+    if (!spot.Images.length) {
+      imagePreview = "There are currently no images for this spot";
+    } else {
+      spot.Images.forEach((image) =>
+        image.preview === true ? (imagePreview = image.url) : null
+      );
+    }
+    return {
+      id,
+      ownerId,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+      createdAt,
+      updatedAt,
+      avgRating,
+      imagePreview,
+    };
+  });
+
+  return res.json({ Spots: updatedSpots });
 });
 
 module.exports = router;
