@@ -22,6 +22,85 @@ const validateBooking = [
   handleValidationErrors,
 ];
 
+//Get booking of current user
+router.get("/current", requireAuth, async (req, res, next) => {
+  const { user } = req;
+
+  const userBookings = await Booking.findAll({
+    where: {
+      userId: user.id,
+    },
+    include: [
+      {
+        model: Spot,
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "description"],
+        },
+        include: {
+          model: Image,
+          attributes: ["preview", "url"],
+        },
+      },
+    ],
+  });
+
+  if (!userBookings) {
+    const err = new Error("No bookings have been found");
+    err.status = 404;
+    return next(err);
+  }
+
+  const newBookings = userBookings.map((booking) => {
+    const {
+      id,
+      spotId,
+      userId,
+      startDate,
+      endDate,
+      createdAt,
+      updatedAt,
+      Spot,
+    } = booking;
+
+    let previewImage = "There are currently no images for this spot";
+
+    if (Spot.Images) {
+      Spot.Images.forEach((image) =>
+        image.preview ? (previewImage = image.url) : null
+      );
+    }
+
+    const newSpot = {
+      id: Spot.id,
+      ownerId: Spot.ownerId,
+      address: Spot.address,
+      city: Spot.city,
+      state: Spot.state,
+      country: Spot.country,
+      lat: Spot.lat,
+      lng: Spot.lng,
+      name: Spot.name,
+      price: Spot.price,
+      previewImage,
+    };
+
+    return {
+      id,
+      spotId,
+      Spot: newSpot,
+      userId,
+      startDate,
+      endDate,
+      createdAt,
+      updatedAt,
+
+    };
+  });
+
+  return res.json({ Bookings: newBookings });
+});
+
+//Edit booking by id
 router.put("/:bookingId", validateBooking, async (req, res, next) => {
   const { user } = req;
   const bookingId = Number(req.params.bookingId);
