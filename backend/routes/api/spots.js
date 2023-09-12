@@ -397,7 +397,7 @@ router.get("/current", requireAuth, async (req, res) => {
 });
 
 //get spots from id
-router.get("/:spotId", async (req, res) => {
+router.get("/:spotId", async (req, res, next) => {
   const spotId = Number(req.params.spotId);
 
   const currentSpot = await Spot.findByPk(spotId, {
@@ -438,9 +438,9 @@ router.get("/:spotId", async (req, res) => {
     createdAt,
     updatedAt,
   } = currentSpot;
-  let avgRating;
+  let avgStarRating;
   if (!currentSpot.Reviews.length) {
-    avgRating = "There are currently no reviews for this spot";
+    avgStarRating = "There are currently no reviews for this spot";
   } else {
     let sum = 0;
     currentSpot.Reviews.forEach((review) => {
@@ -463,7 +463,7 @@ router.get("/:spotId", async (req, res) => {
     createdAt,
     updatedAt,
     numReviews: currentSpot.Reviews.length,
-    avgRating,
+    avgStarRating,
     SpotImages: currentSpot.Images.length
       ? currentSpot.Images
       : "There are currently no images for this spot",
