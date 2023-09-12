@@ -175,7 +175,6 @@ router.post(
         ],
       },
     });
-    //start         startDate        endDate        end
     bookedDates.forEach((booking) => {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
@@ -405,6 +404,45 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: updatedSpots });
 });
 
+//get bookings for spot by id
+router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const spotId = Number(req.params.spotId);
+
+  const spotBookings = await Booking.findAll({
+    where: {
+      spotId,
+    },
+    include: {
+      model: User,
+      attributes: {
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "username",
+          "email",
+          "hashedPassword",
+        ],
+      },
+    },
+  });
+
+  if (!spotBookings.length) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+
+  const filteredBookings = spotBookings.map((booking) => {
+    if (user.id === booking.User.id) return booking;
+    const { spotId, startDate, endDate } = booking;
+    return { spotId, startDate, endDate };
+  });
+
+  return res.json({ Bookings: filteredBookings });
+});
+
 //get spots from id
 router.get("/:spotId", async (req, res, next) => {
   const spotId = Number(req.params.spotId);
@@ -425,6 +463,7 @@ router.get("/:spotId", async (req, res, next) => {
       },
     ],
   });
+
 
   if (!currentSpot) {
     const err = new Error("Spot couldn't be found");
