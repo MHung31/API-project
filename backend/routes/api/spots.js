@@ -302,25 +302,29 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   return res.status(201).json(newSpot);
 });
 
-// router.delete("/", (req, res) => {
-//   res.clearCookie("token");
-//   return res.json({ message: "success" });
-// });
+//delete a spot
+router.delete("/:spotId", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const spotId = Number(req.params.spotId);
 
-// router.get("/current", requireAuth, async (req, res) => {
-//   const { user } = req;
-//   if (user) {
-//     const currentSpots = await Spot.findAll({
-//       where: {
-//         ownerId: user.id,
-//       },
-//     });
+  const currSpot = await Spot.findByPk(spotId);
 
-//     return res.json(currentSpots);
-//   }
-// });
+  if (!currSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
 
+  if (currSpot.ownerId !== user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  }
+  console.log("hello----------", currSpot)
+  await currSpot.destroy();
 
+  return res.json({ message: "Successfully deleted" });
+});
 
 //Get all spots of current
 router.get("/current", requireAuth, async (req, res) => {
@@ -470,7 +474,7 @@ router.get("/:spotId", async (req, res, next) => {
     Owner: currentSpot.User,
   };
 
-  return res.json( updatedSpot );
+  return res.json(updatedSpot);
 });
 
 //Get all spots
@@ -479,7 +483,7 @@ router.get("/", async (req, res) => {
     include: [{ model: Review }, { model: Image }],
   });
 
-  if (!currentSpots) {
+  if (!currentSpots.length) {
     return res.json({
       message: "No spots have been entered into the database at this time.",
     });
