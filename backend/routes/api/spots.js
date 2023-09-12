@@ -320,6 +320,83 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 //   }
 // });
 
+//get spots from id
+router.get("/:spotId", async (req, res) => {
+  const spotId = Number(req.params.spotId);
+
+  const currentSpot = await Spot.findByPk(spotId, {
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: Image,
+        attributes: ["id", "url", "preview"],
+      },
+
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+    ],
+  });
+
+  if (!currentSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+  const {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    createdAt,
+    updatedAt,
+  } = currentSpot;
+  let avgRating;
+  if (!currentSpot.Reviews.length) {
+    avgRating = "There are currently no reviews for this spot";
+  } else {
+    let sum = 0;
+    currentSpot.Reviews.forEach((review) => {
+      sum += review.stars;
+    });
+    avgRating = Math.round((sum / currentSpot.Reviews.length) * 10) / 10;
+  }
+  const updatedSpot = {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    createdAt,
+    updatedAt,
+    numReviews: currentSpot.Reviews.length,
+    avgRating,
+    SpotImages: currentSpot.Images.length
+      ? currentSpot.Images
+      : "There are currently no images for this spot",
+    Owner: currentSpot.User,
+  };
+
+  return res.json( updatedSpot );
+});
+
 //Get all spots of current
 router.get("/current", requireAuth, async (req, res) => {
   const { user } = req;
