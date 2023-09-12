@@ -320,6 +320,82 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
 //   }
 // });
 
+
+
+//Get all spots of current
+router.get("/current", requireAuth, async (req, res) => {
+  const { user } = req;
+
+  const currentSpots = await Spot.findAll({
+    where: {
+      ownerId: user.id,
+    },
+    include: [{ model: Review }, { model: Image }],
+  });
+
+  if (!currentSpots) {
+    return res.json({
+      message: "No spots have been entered into the database at this time.",
+    });
+  }
+
+  let updatedSpots = currentSpots.map((spot) => {
+    const {
+      id,
+      ownerId,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+      createdAt,
+      updatedAt,
+    } = spot;
+    let avgRating;
+    let imagePreview;
+    if (!spot.Reviews.length) {
+      avgRating = "There are currently no reviews for this spot";
+    } else {
+      let sum = 0;
+      spot.Reviews.forEach((review) => {
+        sum += review.stars;
+      });
+      avgRating = Math.round((sum / spot.Reviews.length) * 10) / 10;
+    }
+
+    if (!spot.Images.length) {
+      imagePreview = "There are currently no images for this spot";
+    } else {
+      spot.Images.forEach((image) =>
+        image.preview === true ? (imagePreview = image.url) : null
+      );
+    }
+    return {
+      id,
+      ownerId,
+      address,
+      city,
+      state,
+      country,
+      lat,
+      lng,
+      name,
+      description,
+      price,
+      createdAt,
+      updatedAt,
+      avgRating,
+      imagePreview,
+    };
+  });
+
+  return res.json({ Spots: updatedSpots });
+});
+
 //get spots from id
 router.get("/:spotId", async (req, res) => {
   const spotId = Number(req.params.spotId);
@@ -395,80 +471,6 @@ router.get("/:spotId", async (req, res) => {
   };
 
   return res.json( updatedSpot );
-});
-
-//Get all spots of current
-router.get("/current", requireAuth, async (req, res) => {
-  const { user } = req;
-
-  const currentSpots = await Spot.findAll({
-    where: {
-      ownerId: user.id,
-    },
-    include: [{ model: Review }, { model: Image }],
-  });
-
-  if (!currentSpots) {
-    return res.json({
-      message: "No spots have been entered into the database at this time.",
-    });
-  }
-
-  let updatedSpots = currentSpots.map((spot) => {
-    const {
-      id,
-      ownerId,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-      createdAt,
-      updatedAt,
-    } = spot;
-    let avgRating;
-    let imagePreview;
-    if (!spot.Reviews.length) {
-      avgRating = "There are currently no reviews for this spot";
-    } else {
-      let sum = 0;
-      spot.Reviews.forEach((review) => {
-        sum += review.stars;
-      });
-      avgRating = Math.round((sum / spot.Reviews.length) * 10) / 10;
-    }
-
-    if (!spot.Images.length) {
-      imagePreview = "There are currently no images for this spot";
-    } else {
-      spot.Images.forEach((image) =>
-        image.preview === true ? (imagePreview = image.url) : null
-      );
-    }
-    return {
-      id,
-      ownerId,
-      address,
-      city,
-      state,
-      country,
-      lat,
-      lng,
-      name,
-      description,
-      price,
-      createdAt,
-      updatedAt,
-      avgRating,
-      imagePreview,
-    };
-  });
-
-  return res.json({ Spots: updatedSpots });
 });
 
 //Get all spots
