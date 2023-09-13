@@ -404,6 +404,53 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: updatedSpots });
 });
 
+//get reviews by a spot's id
+router.get("/:spotId/reviews", async (req, res, next) => {
+  const spotId = Number(req.params.spotId);
+
+  const currSpot = await Spot.findByPk(spotId);
+  if (!currSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+  const spotReviews = await Review.findAll({
+    where: spotId,
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Image,
+        attributes: ["id", "url", "imageableType"],
+      },
+    ],
+  });
+
+  if (!spotReviews.length) {
+    return res.json({
+      message: "There are currently no reviews for this spot",
+    });
+  }
+
+  const updatedReviews = spotReviews.map((spotReview) => {
+    const {
+      dataValues: { Images, ...newReviews },
+    } = spotReview;
+
+    const ReviewImages = Images.map((image) => {
+      if ((image.imageableType = "Review")) {
+        return { id: image.id, url: image.url };
+      }
+    });
+
+    return { ...newReviews, ReviewImages };
+  });
+
+  return res.json(updatedReviews);
+});
+
 //get bookings for spot by id
 router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
   const { user } = req;
