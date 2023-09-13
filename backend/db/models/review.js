@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       });
       Review.belongsTo(models.Spot, {
         foreignKey: "spotId",
+        onDelete: "CASCADE",
       });
 
       Review.hasMany(models.Image, {
@@ -21,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
         scope: {
           imageableType: "Review",
         },
+        //
+        onDelete: "CASCADE",
+        hooks: true,
       });
     }
   }

@@ -146,10 +146,16 @@ router.post(
     let { startDate, endDate } = req.body;
     const { user } = req;
     const spotId = Number(req.params.spotId);
-
-    if (!(await Spot.findByPk(spotId))) {
+    const currSpot = await Spot.findByPk(spotId);
+    if (!currSpot) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
+      return next(err);
+    }
+
+    if (currSpot.ownerId === user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
       return next(err);
     }
 
@@ -169,11 +175,9 @@ router.post(
         ],
       },
     });
-    //start         startDate        endDate        end
     bookedDates.forEach((booking) => {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
-      console.log(start, startDate, endDate, end);
       if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
         const err = new Error(
           "Sorry, this spot is already booked for the specified dates"
@@ -302,99 +306,28 @@ router.post("/", requireAuth, validateCreateSpot, async (req, res, next) => {
   return res.status(201).json(newSpot);
 });
 
-// router.delete("/", (req, res) => {
-//   res.clearCookie("token");
-//   return res.json({ message: "success" });
-// });
-
-// router.get("/current", requireAuth, async (req, res) => {
-//   const { user } = req;
-//   if (user) {
-//     const currentSpots = await Spot.findAll({
-//       where: {
-//         ownerId: user.id,
-//       },
-//     });
-
-//     return res.json(currentSpots);
-//   }
-// });
-
-//get spots from id
-router.get("/:spotId", async (req, res) => {
+//delete a spot
+router.delete("/:spotId", requireAuth, async (req, res, next) => {
+  const { user } = req;
   const spotId = Number(req.params.spotId);
 
-  const currentSpot = await Spot.findByPk(spotId, {
-    include: [
-      {
-        model: Review,
-      },
-      {
-        model: Image,
-        attributes: ["id", "url", "preview"],
-      },
+  const currSpot = await Spot.findByPk(spotId);
 
-      {
-        model: User,
-        attributes: ["id", "firstName", "lastName"],
-      },
-    ],
-  });
-
-  if (!currentSpot) {
+  if (!currSpot) {
     const err = new Error("Spot couldn't be found");
     err.status = 404;
     return next(err);
   }
 
-  const {
-    id,
-    ownerId,
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-    createdAt,
-    updatedAt,
-  } = currentSpot;
-  let avgRating;
-  if (!currentSpot.Reviews.length) {
-    avgRating = "There are currently no reviews for this spot";
-  } else {
-    let sum = 0;
-    currentSpot.Reviews.forEach((review) => {
-      sum += review.stars;
-    });
-    avgRating = Math.round((sum / currentSpot.Reviews.length) * 10) / 10;
+  if (currSpot.ownerId !== user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
   }
-  const updatedSpot = {
-    id,
-    ownerId,
-    address,
-    city,
-    state,
-    country,
-    lat,
-    lng,
-    name,
-    description,
-    price,
-    createdAt,
-    updatedAt,
-    numReviews: currentSpot.Reviews.length,
-    avgRating,
-    SpotImages: currentSpot.Images.length
-      ? currentSpot.Images
-      : "There are currently no images for this spot",
-    Owner: currentSpot.User,
-  };
+  console.log("hello----------", currSpot);
+  await currSpot.destroy();
 
-  return res.json( updatedSpot );
+  return res.json({ message: "Successfully deleted" });
 });
 
 //Get all spots of current
@@ -471,13 +404,130 @@ router.get("/current", requireAuth, async (req, res) => {
   return res.json({ Spots: updatedSpots });
 });
 
+//get bookings for spot by id
+router.get("/:spotId/bookings", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const spotId = Number(req.params.spotId);
+
+  const spotBookings = await Booking.findAll({
+    where: {
+      spotId,
+    },
+    include: {
+      model: User,
+      attributes: {
+        exclude: [
+          "createdAt",
+          "updatedAt",
+          "username",
+          "email",
+          "hashedPassword",
+        ],
+      },
+    },
+  });
+
+  if (!spotBookings.length) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+
+  const filteredBookings = spotBookings.map((booking) => {
+    if (user.id === booking.User.id) return booking;
+    const { spotId, startDate, endDate } = booking;
+    return { spotId, startDate, endDate };
+  });
+
+  return res.json({ Bookings: filteredBookings });
+});
+
+//get spots from id
+router.get("/:spotId", async (req, res, next) => {
+  const spotId = Number(req.params.spotId);
+
+  const currentSpot = await Spot.findByPk(spotId, {
+    include: [
+      {
+        model: Review,
+      },
+      {
+        model: Image,
+        attributes: ["id", "url", "preview"],
+      },
+
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+    ],
+  });
+
+
+  if (!currentSpot) {
+    const err = new Error("Spot couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+  const {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    createdAt,
+    updatedAt,
+  } = currentSpot;
+  let avgStarRating;
+  if (!currentSpot.Reviews.length) {
+    avgStarRating = "There are currently no reviews for this spot";
+  } else {
+    let sum = 0;
+    currentSpot.Reviews.forEach((review) => {
+      sum += review.stars;
+    });
+    avgRating = Math.round((sum / currentSpot.Reviews.length) * 10) / 10;
+  }
+  const updatedSpot = {
+    id,
+    ownerId,
+    address,
+    city,
+    state,
+    country,
+    lat,
+    lng,
+    name,
+    description,
+    price,
+    createdAt,
+    updatedAt,
+    numReviews: currentSpot.Reviews.length,
+    avgStarRating,
+    SpotImages: currentSpot.Images.length
+      ? currentSpot.Images
+      : "There are currently no images for this spot",
+    Owner: currentSpot.User,
+  };
+
+  return res.json(updatedSpot);
+});
+
 //Get all spots
 router.get("/", async (req, res) => {
   const currentSpots = await Spot.findAll({
     include: [{ model: Review }, { model: Image }],
   });
 
-  if (!currentSpots) {
+  if (!currentSpots.length) {
     return res.json({
       message: "No spots have been entered into the database at this time.",
     });
