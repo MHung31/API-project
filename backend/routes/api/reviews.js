@@ -160,6 +160,30 @@ router.get("/current", requireAuth, async (req, res, next) => {
   return res.json(updatedReviews);
 });
 
+//delete a review
+router.delete("/:reviewId", requireAuth, async (req, res, next) => {
+  const { user } = req;
+  const reviewId = Number(req.params.reviewId);
+
+  const currReview = await Review.findByPk(reviewId);
+  
+  if (!currReview) {
+    const err = new Error("Review couldn't be found");
+    err.status = 404;
+    return next(err);
+  }
+
+  if (currReview.userId !== user.id) {
+    const err = new Error("Forbidden");
+    err.status = 403;
+    return next(err);
+  }
+
+  await currReview.destroy();
+
+  return res.json({ message: "Successfully deleted" });
+});
+
 //edit a review
 router.put(
   "/:reviewId",
