@@ -67,6 +67,99 @@ router.post("/:reviewId/images", requireAuth, async (req, res, next) => {
   });
 });
 
+//get current user reviews
+router.get("/current", requireAuth, async (req, res, next) => {
+  const { user } = req;
+
+  const userReviews = await Review.findAll({
+    where: {
+      userId: user.id,
+    },
+    include: [
+      {
+        model: User,
+        attributes: ["id", "firstName", "lastName"],
+      },
+      {
+        model: Spot,
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "description"],
+        },
+        include: {
+          model: Image,
+          where: {
+            imageableType: "Spot",
+            preview: true,
+          },
+          attributes: ["preview", "url"],
+        },
+      },
+      {
+        model: Image,
+        where: {
+          imageableType: "Review",
+        },
+        attributes: ["id", "url"],
+      },
+    ],
+  });
+
+  if (!userReviews.length) {
+    return res.json({ message: "You have not entered any reviews yet." });
+  }
+
+  const updatedReviews = userReviews.map((userReview) => {
+    const {
+      id,
+      userId,
+      spotId,
+      review,
+      stars,
+      createdAt,
+      updatedAt,
+      User,
+      Spot,
+      Images,
+    } = userReview;
+    let previewImage;
+    console.log(Spot.Images);
+    if (!Spot.Images) {
+      previewImage = "There are currently no images for this spot";
+    } else {
+      previewImage = Spot.Images[0].url;
+    }
+
+    let newSpot = {
+      id: Spot.id,
+      ownerId: Spot.ownerId,
+      address: Spot.address,
+      city: Spot.city,
+      state: Spot.state,
+      country: Spot.country,
+      lat: Spot.lat,
+      lng: Spot.lng,
+      name: Spot.name,
+      price: Spot.price,
+      previewImage: previewImage,
+    };
+
+    return {
+      id,
+      userId,
+      spotId,
+      review,
+      stars,
+      createdAt,
+      updatedAt,
+      User,
+      Spot: newSpot,
+      ReviewImages: Images,
+    };
+  });
+
+  return res.json(updatedReviews);
+});
+
 //edit a review
 router.put(
   "/:reviewId",
