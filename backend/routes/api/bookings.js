@@ -100,81 +100,86 @@ router.get("/current", requireAuth, async (req, res, next) => {
 });
 
 //Edit booking by id
-router.put("/:bookingId", validateBooking, async (req, res, next) => {
-  const { user } = req;
-  const bookingId = Number(req.params.bookingId);
-  let { startDate, endDate } = req.body;
+router.put(
+  "/:bookingId",
+  requireAuth,
+  validateBooking,
+  async (req, res, next) => {
+    const { user } = req;
+    const bookingId = Number(req.params.bookingId);
+    let { startDate, endDate } = req.body;
 
-  const currBooking = await Booking.findByPk(bookingId);
+    const currBooking = await Booking.findByPk(bookingId);
 
-  if (!currBooking) {
-    const err = new Error("Booking couldn't be found");
-    err.status = 404;
-    return next(err);
-  }
+    if (!currBooking) {
+      const err = new Error("Booking couldn't be found");
+      err.status = 404;
+      return next(err);
+    }
 
-  if (currBooking.userId !== user.id) {
-    const err = new Error("Forbidden");
-    err.status = 403;
-    return next(err);
-  }
-  if (new Date(currBooking.endDate) < new Date()) {
-    const err = new Error("Past bookings can't be modified");
-    err.status = 403;
-    return next(err);
-  }
+    if (currBooking.userId !== user.id) {
+      const err = new Error("Forbidden");
+      err.status = 403;
+      return next(err);
+    }
+    if (new Date(currBooking.endDate) < new Date()) {
+      const err = new Error("Past bookings can't be modified");
+      err.status = 403;
+      return next(err);
+    }
 
-  const bookedDates = await Booking.findAll({
-    where: {
-      spotId: currBooking.spotId,
-      [Op.or]: [
-        {
-          startDate: {
-            [Op.gte]: startDate,
+    const bookedDates = await Booking.findAll({
+      where: {
+        spotId: currBooking.spotId,
+        [Op.or]: [
+          {
+            startDate: {
+              [Op.gte]: startDate,
+            },
           },
+          {
+            endDate: { [Op.lte]: endDate },
+          },
+        ],
+        [Op.not]: {
+          id: bookingId,
         },
-        {
-          endDate: { [Op.lte]: endDate },
-        },
-      ],
-      [Op.not]: {
-        id: bookingId,
       },
-    },
-  });
-  bookedDates.forEach((booking) => {
-    const start = new Date(booking.startDate);
-    const end = new Date(booking.endDate);
-    if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
-      const err = new Error(
-        "Sorry, this spot is already booked for the specified dates"
-      );
-      err.status = 403;
-      err.errors = {
-        startDate: "Start date conflicts with an existing booking",
-      };
-      return next(err);
-    }
+    });
+    bookedDates.forEach((booking) => {
+      const start = new Date(booking.startDate);
+      const end = new Date(booking.endDate);
+      if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
+        const err = new Error(
+          "Sorry, this spot is already booked for the specified dates"
+        );
+        err.status = 403;
+        err.errors = {
+          startDate: "Start date conflicts with an existing booking",
+        };
+        return next(err);
+      }
 
-    if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
-      const err = new Error(
-        "Sorry, this spot is already booked for the specified dates"
-      );
-      err.status = 403;
-      err.errors = {
-        endDate: "End date conflicts with an existing booking",
-      };
-      return next(err);
-    }
-  });
+      if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
+        const err = new Error(
+          "Sorry, this spot is already booked for the specified dates"
+        );
+        err.status = 403;
+        err.errors = {
+          endDate: "End date conflicts with an existing booking",
+        };
+        return next(err);
+      }
+    });
 
-  await currBooking.update({
-    startDate,
-    endDate,
-  });
+    await currBooking.update({
+      startDate,
+      endDate,
+    });
 
-  return res.json(currBooking);
-});
+    return res.json(currBooking);
+  }
+);
 
 //delete booking
 router.delete("/:bookingId", requireAuth, async (req, res, next) => {

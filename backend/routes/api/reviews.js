@@ -87,18 +87,13 @@ router.get("/current", requireAuth, async (req, res, next) => {
         },
         include: {
           model: Image,
-          where: {
-            imageableType: "Spot",
-            preview: true,
-          },
+
           attributes: ["preview", "url"],
         },
       },
       {
         model: Image,
-        where: {
-          imageableType: "Review",
-        },
+
         attributes: ["id", "url"],
       },
     ],
@@ -122,7 +117,6 @@ router.get("/current", requireAuth, async (req, res, next) => {
       Images,
     } = userReview;
     let previewImage;
-    console.log(Spot.Images);
     if (!Spot.Images) {
       previewImage = "There are currently no images for this spot";
     } else {
@@ -157,7 +151,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     };
   });
 
-  return res.json(updatedReviews);
+  return res.json({Reviews: updatedReviews});
 });
 
 //delete a review
@@ -166,7 +160,7 @@ router.delete("/:reviewId", requireAuth, async (req, res, next) => {
   const reviewId = Number(req.params.reviewId);
 
   const currReview = await Review.findByPk(reviewId);
-  
+
   if (!currReview) {
     const err = new Error("Review couldn't be found");
     err.status = 404;

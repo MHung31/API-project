@@ -80,12 +80,14 @@ const validateQuery = [
     .optional()
     .isInt({
       min: 1,
+      max: 10,
     })
     .withMessage("Page must be greater than or equal to 1"),
   check("size")
     .optional()
     .isInt({
       min: 1,
+      max: 20,
     })
     .withMessage("Size must be greater than or equal to 1"),
   check("minLat")
@@ -119,7 +121,7 @@ const validateQuery = [
   handleValidationErrors,
 ];
 
-//Add image to post
+//Add image to spot
 router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   let { url, preview } = req.body;
   const spotId = Number(req.params.spotId);
@@ -137,12 +139,6 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
     err.status = 403;
     return next(err);
   }
-
-  //TODO: Image Preview changes depending on situations
-  //Requires currSpot to include images when pulling
-  //If no images exist, first image preview has to be true
-  //if preview is true, then old true image turns false
-  //if preview is false, and previous image has true, preview can stay false
 
   const currSpotImage = await Spot.findByPk(spotId, {
     include: {
@@ -361,7 +357,6 @@ router.delete("/:spotId", requireAuth, async (req, res, next) => {
     err.status = 403;
     return next(err);
   }
-  console.log("hello----------", currSpot);
   await currSpot.destroy();
 
   return res.json({ message: "Successfully deleted" });
@@ -452,7 +447,9 @@ router.get("/:spotId/reviews", async (req, res, next) => {
     return next(err);
   }
   const spotReviews = await Review.findAll({
-    where: spotId,
+    where: {
+      spotId: spotId,
+    },
     include: [
       {
         model: User,
@@ -485,7 +482,7 @@ router.get("/:spotId/reviews", async (req, res, next) => {
     return { ...newReviews, ReviewImages };
   });
 
-  return res.json(updatedReviews);
+  return res.json({ Reviews: updatedReviews });
 });
 
 //get bookings for spot by id
@@ -579,7 +576,7 @@ router.get("/:spotId", async (req, res, next) => {
     currentSpot.Reviews.forEach((review) => {
       sum += review.stars;
     });
-    avgRating = Math.round((sum / currentSpot.Reviews.length) * 10) / 10;
+    avgStarRating = Math.round((sum / currentSpot.Reviews.length) * 10) / 10;
   }
   const updatedSpot = {
     id,
@@ -613,7 +610,7 @@ router.get("/", validateQuery, async (req, res) => {
 
   const parameters = { where: {} };
 
-  !size ? (size = 1) : (size = Number(size));
+  !size ? (size = 20) : (size = Number(size));
   !page ? (page = 1) : (page = Number(page));
   parameters.limit = size;
   parameters.offset = (page - 1) * size;
