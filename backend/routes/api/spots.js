@@ -144,29 +144,22 @@ router.post("/:spotId/images", requireAuth, async (req, res, next) => {
   //if preview is true, then old true image turns false
   //if preview is false, and previous image has true, preview can stay false
 
-  // const currSpotImage = await Spot.findByPk(spotId, {
-  //   include: {
-  //     model: Image,
-  //     where: {
-  //       preview: true,
-  //     },
-  //   },
-  // });
+  const currSpotImage = await Spot.findByPk(spotId, {
+    include: {
+      model: Image,
+      where: {
+        imageableType: "Spot",
+        preview: true,
+      },
+    },
+  });
 
-  // // console.log(currSpotImage)
-
-  // if (!currSpotImage) {
-  //   preview = true;
-  // } else if (preview === true) {
-  //   currSpotImage.Images[0].preview = false;
-  //   currSpotImage.save();
-  // }
-  // const currSpotImages = await Spot.findByPk(spotId, {
-  //   include: {
-  //     model: Image,
-  //   },
-  // });
-  // console.log(currSpotImages.Images);
+  if (!currSpotImage) {
+    preview = true;
+  } else if (preview === true) {
+    currSpotImage.Images[0].preview = false;
+    currSpotImage.Images[0].save();
+  }
 
   const spotImage = await Image.create({
     url,
