@@ -34,10 +34,8 @@ router.post("/", validateLogin, async (req, res, next) => {
   });
 
   if (!user || !bcrypt.compareSync(password, user.hashedPassword.toString())) {
-    const err = new Error("Login failed");
+    const err = new Error("Invalid credentials");
     err.status = 401;
-    err.title = "Login failed";
-    err.errors = { credential: "Invalid credentials" };
     return next(err);
   }
 
@@ -61,7 +59,7 @@ router.delete("/", (req, res) => {
   return res.json({ message: "success" });
 });
 
-router.get("/", requireAuth, (req, res) => {
+router.get("/",  (req, res) => {
   const { user } = req;
   if (user) {
     const safeUser = {
