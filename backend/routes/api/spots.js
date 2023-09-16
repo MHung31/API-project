@@ -28,11 +28,17 @@ const validateCreateSpot = [
     .withMessage("Country is required"),
   check("lat")
     .exists({ checkFalsy: true })
-    .isDecimal()
+    .isFloat({
+      min: -90,
+      max: 90,
+    })
     .withMessage("Latitude is not valid"),
   check("lng")
     .exists({ checkFalsy: true })
-    .isDecimal()
+    .isFloat({
+      min: -180,
+      max: 180,
+    })
     .withMessage("Longitude is not valid"),
   check("name")
     .exists({ checkFalsy: true })
@@ -45,7 +51,11 @@ const validateCreateSpot = [
     .withMessage("Description is required"),
   check("price")
     .exists({ checkFalsy: true })
-    .withMessage("Price per day is required"),
+    .isFloat({
+      min: 0,
+    })
+    .withMessage("Price per day is required and must be 0 or greater"),
+
   handleValidationErrors,
 ];
 
@@ -92,19 +102,31 @@ const validateQuery = [
     .withMessage("Size must be greater than or equal to 1"),
   check("minLat")
     .optional()
-    .isDecimal()
+    .isFloat({
+      min: -90,
+      max: 90,
+    })
     .withMessage("Minimum latitude is invalid"),
   check("maxLat")
     .optional()
-    .isDecimal()
+    .isFloat({
+      min: -90,
+      max: 90,
+    })
     .withMessage("Maximum latitude is invalid"),
   check("minLng")
     .optional()
-    .isDecimal()
+    .isFloat({
+      min: -180,
+      max: 180,
+    })
     .withMessage("Minimum longitude is invalid"),
   check("maxLng")
     .optional()
-    .isDecimal()
+    .isFloat({
+      min: -180,
+      max: 180,
+    })
     .withMessage("Maximum longitude is invalid"),
   check("minPrice")
     .optional()
@@ -208,9 +230,10 @@ router.post(
         ],
       },
     });
-    bookedDates.forEach((booking) => {
+    for (let booking of bookedDates) {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
+      //    start      startDate      end      endDate
       if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
         const err = new Error(
           "Sorry, this spot is already booked for the specified dates"
@@ -221,7 +244,7 @@ router.post(
         };
         return next(err);
       }
-
+      //   startDate    start    endDate    end
       if (new Date(endDate) - start >= 0 && end - new Date(endDate) >= 0) {
         const err = new Error(
           "Sorry, this spot is already booked for the specified dates"
@@ -232,7 +255,23 @@ router.post(
         };
         return next(err);
       }
-    });
+
+      // startDate       start        end      endDate
+      if (
+        (start - new Date(endDate) >= 0 && new Date(endDate) - start >= 0) ||
+        (end - new Date(startDate) >= 0 && new Date(endDate) - end >= 0)
+      ) {
+        const err = new Error(
+          "Sorry, a booking already exists within your reservation dates"
+        );
+        err.status = 403;
+        err.errors = {
+          message:
+            "A reservation already exists within your start and end dates",
+        };
+        return next(err);
+      }
+    }
 
     const newBooking = await Booking.create({
       userId: user.id,
@@ -256,11 +295,19 @@ router.post(
     const { user } = req;
     stars = Number(stars);
 
-    if (!(await Spot.findByPk(spotId))) {
+    const currSpot = await Spot.findByPk(spotId);
+    if (!currSpot) {
       const err = new Error("Spot couldn't be found");
       err.status = 404;
       return next(err);
     }
+
+    if (currSpot.ownerId === user.id) {
+      const err = new Error("You cannot make a review for your own spot");
+      err.status = 403;
+      return next(err);
+    }
+
     if (await Review.findOne({ where: { userId: user.id, spotId } })) {
       const err = new Error("User already has a review for this spot");
       err.status = 500;

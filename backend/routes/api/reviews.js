@@ -117,7 +117,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
       Images,
     } = userReview;
     let previewImage;
-    if (!Spot.Images) {
+    if (!Spot.Images[0]) {
       previewImage = "There are currently no images for this spot";
     } else {
       previewImage = Spot.Images[0].url;
@@ -151,7 +151,7 @@ router.get("/current", requireAuth, async (req, res, next) => {
     };
   });
 
-  return res.json({Reviews: updatedReviews});
+  return res.json({ Reviews: updatedReviews });
 });
 
 //delete a review

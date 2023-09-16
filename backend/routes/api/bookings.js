@@ -146,7 +146,7 @@ router.put(
         },
       },
     });
-    bookedDates.forEach((booking) => {
+    for (let booking of bookedDates) {
       const start = new Date(booking.startDate);
       const end = new Date(booking.endDate);
       if (new Date(startDate) - start >= 0 && end - new Date(startDate) >= 0) {
@@ -170,7 +170,21 @@ router.put(
         };
         return next(err);
       }
-    });
+
+      if (
+        (start - new Date(endDate) >= 0 && new Date(endDate) - start >= 0) ||
+        (end - new Date(startDate) >= 0 && new Date(endDate) - end >= 0)
+      ) {
+        const err = new Error(
+          "Sorry, a booking already exists within your reservation dates"
+        );
+        err.status = 403;
+        err.errors = {
+          message: "A reservation already exists within your start and end dates",
+        };
+        return next(err);
+      }
+    }
 
     await currBooking.update({
       startDate,
