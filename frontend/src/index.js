@@ -2,12 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import { Provider as ReduxProvider } from "react-redux";
-import "./index.css";
-import App from "./App";
-import configureStore from "./store";
+import './index.css';
+import App from './App';
+import configureStore from './store';
 import { restoreCSRF, csrfFetch } from "./store/csrf";
-import * as sessionActions from "./store/session";
-import "./LoginForm.css";
+import * as sessionActions from './store/session';
+import './store/components/LoginFormPage/LoginForm.css';
 
 const store = configureStore();
 
