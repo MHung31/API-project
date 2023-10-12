@@ -1,32 +1,53 @@
-import React, { useState } from "react";
-import { useDispatch } from 'react-redux';
-import * as sessionActions from '../../session';
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
+import * as sessionActions from "../../session";
 
 function ProfileButton({ user }) {
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
+    const [showMenu, setShowMenu] = useState(false);
+    const ulRef = useRef();
 
-  const logout = (e) => {
-    e.preventDefault();
-    dispatch(sessionActions.logout());
-  };
+    const openMenu = () => {
+      if (showMenu) return;
+      setShowMenu(true);
+    };
 
-  const ulClassName = "profile-dropdown";
+    useEffect(() => {
+      if (!showMenu) return;
 
-  return (
-    <>
-      <button>
-        <i className="fas fa-user-circle" />
-      </button>
-      <ul className="profile-dropdown">
-        <li>{user.username}</li>
-        <li>{user.firstName} {user.lastName}</li>
-        <li>{user.email}</li>
-        <li>
-          <button onClick={logout}>Log Out</button>
-        </li>
-      </ul>
-    </>
-  );
-}
+      const closeMenu = (e) => {
+        if (!ulRef.current.contains(e.target)) {
+          setShowMenu(false);
+        }
+      };
 
-export default ProfileButton;
+      document.addEventListener('click', closeMenu);
+
+      return () => document.removeEventListener("click", closeMenu);
+    }, [showMenu]);
+
+    const logout = (e) => {
+      e.preventDefault();
+      dispatch(sessionActions.logout());
+    };
+
+    const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
+
+    return (
+      <>
+        <button onClick={openMenu}>
+          <i className="fas fa-user-circle" />
+        </button>
+        <ul className={ulClassName} ref={ulRef}>
+          <li>{user.username}</li>
+          <li>{user.firstName} {user.lastName}</li>
+          <li>{user.email}</li>
+          <li>
+            <button onClick={logout}>Log Out</button>
+          </li>
+        </ul>
+      </>
+    );
+  }
+
+  export default ProfileButton;
