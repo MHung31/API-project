@@ -25,3 +25,7 @@ textarea {
   height: 16px;
   font-size: 14px;
 }
+
+::placeholder {
+  color: rgb(174, 174, 174)
+}

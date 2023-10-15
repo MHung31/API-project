@@ -25,7 +25,8 @@ export const newSpotThunk = (spot) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    return dispatch(newSpot(data));
+    dispatch(newSpot(data));
+    return data;
   } else {
     const error = await response.json();
     return error;
@@ -37,7 +38,8 @@ export const getAllSpotsThunk = () => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    return dispatch(getAllSpots(data.Spots));
+    dispatch(getAllSpots(data.Spots));
+    return data;
   } else {
     const error = await response.json();
     return error;

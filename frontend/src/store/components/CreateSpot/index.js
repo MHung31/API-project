@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import "./CreateSpot.css";
 import { newSpotThunk } from "../../spots";
+import { addSpotImageThunk } from "../../images";
 
 export default () => {
   const dispatch = useDispatch();
@@ -38,11 +39,21 @@ export default () => {
       description,
       price,
     };
+
+    const images = [{ url: previewImage, preview: true }];
+    if (image1) images.push({ url: image1, preview: false });
+    if (image2) images.push({ url: image2, preview: false });
+    if (image3) images.push({ url: image3, preview: false });
+    if (image4) images.push({ url: image4, preview: false });
+
     if (!Object.keys(validationErrors).length) {
       const response = await dispatch(newSpotThunk(newSpot));
       if (response.errors && Object.values(response.errors).length) {
         setValidationErrors(response.errors);
       } else {
+        const spotId = response.id;
+        dispatch(addSpotImageThunk(images, spotId));
+
         setValidationErrors({});
         setAddress("");
         setCity("");
@@ -57,13 +68,6 @@ export default () => {
         // setButton(true);
       }
     }
-
-    const images = [{ url: previewImage, preview: true }];
-    if (image1) images.push({ url: image1, preview: false });
-    if (image2) images.push({ url: image2, preview: false });
-    if (image3) images.push({ url: image3, preview: false });
-    if (image4) images.push({ url: image4, preview: false });
-    //handle Images
   };
 
   useEffect(() => {
