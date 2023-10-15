@@ -1,0 +1,27 @@
+form {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  margin: 0 auto;
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.location > div {
+  display: flex;
+  flex-direction: column;
+}
+
+textarea {
+  width: 400px;
+  resize: none;
+  height: 150px;
+}
+
+.errorMessage {
+  height: 16px;
+  font-size: 14px;
+}

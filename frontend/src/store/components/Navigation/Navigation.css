@@ -1,3 +1,15 @@
 .hidden {
   display: none;
 }
+
+ul {
+  display: flex;
+  list-style-type: none;
+  justify-content: space-between;
+  border-bottom: 1px grey solid;
+  padding: 10px;
+}
+
+a {
+  text-decoration: none;
+}
