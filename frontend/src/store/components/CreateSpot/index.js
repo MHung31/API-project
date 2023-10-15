@@ -65,6 +65,11 @@ export default () => {
         setDescription("");
         setPrice("");
         setSubmitted(false);
+        setPreviewImage("");
+        setImage1("");
+        setImage2("");
+        setImage3("");
+        setImage4("");
         // setButton(true);
       }
     }
