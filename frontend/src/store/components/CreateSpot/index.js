@@ -81,16 +81,16 @@ export default () => {
     if (!name) errors.name = "Name is required";
     if (!price) errors.price = "Price is required";
     if (!imageTypes.includes(previewImage.split(".").at(-1)))
-      errors.previewImage = "Image URL must end in .png, .jpg, or .jpeg";
+      errors.previewImage = "Image URL needs to end in pgn or jpg (or jpeg)";
     if (!previewImage) errors.previewImage = "Preview image is required";
     if (image1 && !imageTypes.includes(image1.split(".").at(-1)))
-      errors.image1 = "Image URL must end in .png, .jpg, or .jpeg";
+      errors.image1 = "Image URL needs to end in pgn or jpg (or jpeg)";
     if (image2 && !imageTypes.includes(image2.split(".").at(-1)))
-      errors.image2 = "Image URL must end in .png, .jpg, or .jpeg";
+      errors.image2 = "Image URL needs to end in pgn or jpg (or jpeg)";
     if (image3 && !imageTypes.includes(image3.split(".").at(-1)))
-      errors.image3 = "Image URL must end in .png, .jpg, or .jpeg";
+      errors.image3 = "Image URL needs to end in pgn or jpg (or jpeg)";
     if (image4 && !imageTypes.includes(image4.split(".").at(-1)))
-      errors.image4 = "Image URL must end in .png, .jpg, or .jpeg";
+      errors.image4 = "Image URL needs to end in pgn or jpg (or jpeg)";
     // if (!Object.keys(errors).length) setButton(false);
     setValidationErrors(errors);
   }, [
@@ -278,7 +278,7 @@ export default () => {
             type="text"
             onChange={(e) => setPreviewImage(e.target.value)}
             value={previewImage}
-            placeholder="Preview Image URL (.png, .jpg, or .jpeg)"
+            placeholder="Preview Image URL"
           />
           <div className="errorMessage" style={{ color: "red" }}>
             {submitted && validationErrors.previewImage}
@@ -288,7 +288,7 @@ export default () => {
             type="text"
             onChange={(e) => setImage1(e.target.value)}
             value={image1}
-            placeholder="Image URL (.png, .jpg, or .jpeg)"
+            placeholder="Image URL"
           />
           <div className="errorMessage" style={{ color: "red" }}>
             {submitted && validationErrors.image1}
@@ -298,7 +298,7 @@ export default () => {
             type="text"
             onChange={(e) => setImage2(e.target.value)}
             value={image2}
-            placeholder="Image URL (.png, .jpg, or .jpeg)"
+            placeholder="Image URL"
           />
           <div className="errorMessage" style={{ color: "red" }}>
             {submitted && validationErrors.image2}
@@ -308,7 +308,7 @@ export default () => {
             type="text"
             onChange={(e) => setImage3(e.target.value)}
             value={image3}
-            placeholder="Image URL (.png, .jpg, or .jpeg)"
+            placeholder="Image URL"
           />
           <div className="errorMessage" style={{ color: "red" }}>
             {submitted && validationErrors.image3}
@@ -318,7 +318,7 @@ export default () => {
             type="text"
             onChange={(e) => setImage4(e.target.value)}
             value={image4}
-            placeholder="Image URL (.png, .jpg, or .jpeg)"
+            placeholder="Image URL"
           />
           <div className="errorMessage" style={{ color: "red" }}>
             {submitted && validationErrors.image4}
