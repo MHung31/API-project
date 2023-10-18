@@ -13,3 +13,21 @@ ul {
 a {
   text-decoration: none;
 }
+
+.logo {
+  display: flex;
+  color: rgb(21, 0, 255);
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo > span {
+  margin-left: 5px;
+}
+
+.logo > i {
+  font-size: 30px;
+}

@@ -1,0 +1,6 @@
+.index {
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  margin: 0 auto;
+  width: 1250px;
+}

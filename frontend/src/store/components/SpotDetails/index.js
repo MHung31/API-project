@@ -40,7 +40,6 @@ export default () => {
     } else otherImages.push(image.url);
   });
 
-  console.log("here-->", spotDetails);
 
   return (
     <div className="details">

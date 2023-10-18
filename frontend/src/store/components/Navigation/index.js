@@ -3,21 +3,17 @@ import { NavLink } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
-import { getAllSpotsThunk } from "../../spots";
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
-  const dispatch = useDispatch();
-  
-  useEffect(() => {
-    dispatch(getAllSpotsThunk());
-  }, [dispatch]);
 
   return (
     <ul>
-      <li>
+      <li id="logo">
         <NavLink exact to="/">
-          Logo airbnb
+          <div className="logo">
+            <i class="fa-brands fa-airbnb" /> <span>skybnb</span>
+          </div>
         </NavLink>
       </li>
       {isLoaded && (
