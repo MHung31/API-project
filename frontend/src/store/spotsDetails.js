@@ -3,7 +3,6 @@ import { csrfFetch } from "./csrf";
 const ADD_SPOT = "spotDetails/add";
 
 const addSpot = (spotDetails) => {
-
   return {
     type: ADD_SPOT,
     payload: spotDetails,
@@ -30,11 +29,8 @@ const spotsDetailsReducer = (spotsDetails = initialState, action) => {
   let newSpotsDetails = {};
   switch (action.type) {
     case ADD_SPOT:
+      newSpotsDetails[action.payload.id] = action.payload;
 
-      newSpotsDetails = { ...spotsDetails };
-      if (!newSpotsDetails[action.payload.id]) {
-        newSpotsDetails[action.payload.id] = action.payload;
-      }
       return newSpotsDetails;
     default:
       return spotsDetails;

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addReviewThunk } from "../../reviews.js";
 import { useModal } from "../../../context/Modal";
 import { getReviewsThunk } from "../../reviews";
+import { addSpotDetailsThunk } from "../../spotsDetails";
 
 import "./ReviewForm.css";
 
@@ -44,6 +45,7 @@ const ReviewFormModal = ({ spotId }) => {
       setValidationErrors(response.message);
     } else {
       dispatch(getReviewsThunk(spotId));
+      dispatch(addSpotDetailsThunk(spotId))
       closeModal();
     }
   };

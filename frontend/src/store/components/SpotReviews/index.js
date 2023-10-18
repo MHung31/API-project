@@ -17,14 +17,16 @@ export default () => {
 
   if (!spotReviews) return <></>;
 
-  const order = Object.keys(spotReviews).sort().reverse();
-
+  const order = Object.keys(spotReviews)
+    .sort((a, b) => a - b)
+    .reverse();
+  console.log(spotReviews, order);
 
   return (
     <div className="reviews">
-      {order.length? order.map((key) => (
-        <ReviewCard reviewDetails={spotReviews[key]} />
-      )) : 'Be the first to post a review!'}
+      {order.length
+        ? order.map((key) => <ReviewCard reviewDetails={spotReviews[key]} />)
+        : "Be the first to post a review!"}
     </div>
   );
 };
