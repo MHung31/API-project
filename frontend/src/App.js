@@ -32,6 +32,7 @@ function App() {
             <SpotReviews />
           </Route>
         </Switch>
+       
       )}
     </>
   );

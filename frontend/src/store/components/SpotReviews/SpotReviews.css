@@ -1,5 +1,4 @@
 .reviews {
-  border-top: 1px black solid;
   margin: 0 auto;
   width: 1000px;
 }
@@ -18,4 +17,13 @@
 
 .userReview {
   margin-bottom: 30px;
+}
+
+#post-review-button {
+  margin-bottom: 20px;
+  background-color: rgb(72, 72, 72);
+  color: white;
+  border: 1px black solid;
+  box-shadow: 2px 2px black;
+  height: 25px;
 }

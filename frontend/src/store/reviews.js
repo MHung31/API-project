@@ -22,14 +22,14 @@ export const getReviewsThunk = (spotId) => async (dispatch) => {
   }
 };
 
-const initialState = {  };
+const initialState = {};
 
 const reviewsReducer = (reviews = initialState, action) => {
   let newReviews = {};
   switch (action.type) {
     case GET_REVIEWS:
-      action.payload.forEach((review) => {
-          newReviews[review.id] = review ;
+      action.payload?.forEach((review) => {
+        newReviews[review.id] = review;
       });
       return newReviews;
     default:

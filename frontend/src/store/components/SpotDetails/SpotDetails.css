@@ -1,6 +1,12 @@
 .details {
   margin: 0 auto;
   width: 1000px;
+  border-bottom: 1px gray solid;
+}
+#review-details-header {
+  margin: 0 auto;
+  width: 1000px;
+
 }
 .imageList {
   display: flex;
@@ -25,7 +31,7 @@ img {
 
 .spotDetails {
   display: flex;
-  margin: 20px 0px;
+  margin-top: 20px;
 }
 
 .description > h2 {
@@ -58,6 +64,7 @@ img {
   height: 100px;
   justify-content: center;
   align-content: center;
+  margin-bottom: 16px;
 }
 
 .reserve > button {
@@ -72,3 +79,11 @@ img {
 .reserveDetails > div > span {
   font-size: 12px;
 }
+
+#spot-rating {
+  box-sizing: border-box;
+  padding-top: 3px;
+  font-size: 13px;
+
+}
+
