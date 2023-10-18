@@ -1,11 +1,11 @@
-form {
+.form {
   display: flex;
   flex-direction: column;
-  width: 400px;
+  width: 500px;
   margin: 0 auto;
 }
 
-form > div {
+.form > form > div {
   display: flex;
   flex-direction: column;
 }
@@ -15,7 +15,7 @@ form > div {
   flex-direction: column;
 }
 
-textarea {
+#description {
   width: 400px;
   resize: none;
   height: 150px;
@@ -27,5 +27,5 @@ textarea {
 }
 
 ::placeholder {
-  color: rgb(174, 174, 174)
+  color: rgb(174, 174, 174);
 }

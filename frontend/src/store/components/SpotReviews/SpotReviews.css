@@ -19,11 +19,13 @@
   margin-bottom: 30px;
 }
 
-#post-review-button {
-  margin-bottom: 20px;
+
+
+.userReview > button {
   background-color: rgb(72, 72, 72);
   color: white;
   border: 1px black solid;
   box-shadow: 2px 2px black;
   height: 25px;
+  margin-right: 10px;
 }

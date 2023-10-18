@@ -24,6 +24,7 @@ export default ({ reviewDetails }) => {
       <h4>{firstName}</h4>
       <h5>{`${month} ${year}`}</h5>
       <p>{review}</p>
+      <button>Update</button> <button>Delete</button>
     </div>
   );
 };

@@ -6,7 +6,6 @@
 #review-details-header {
   margin: 0 auto;
   width: 1000px;
-
 }
 .imageList {
   display: flex;
@@ -67,7 +66,8 @@ img {
   margin-bottom: 16px;
 }
 
-.reserve > button {
+.reserve > button
+ {
   margin: 10px 0px;
   height: 40px;
   background-color: rgba(255, 0, 0, 0.592);
@@ -84,6 +84,13 @@ img {
   box-sizing: border-box;
   padding-top: 3px;
   font-size: 13px;
-
 }
 
+#post-review-button {
+  margin-bottom: 20px;
+  background-color: rgb(72, 72, 72);
+  color: white;
+  border: 1px black solid;
+  box-shadow: 2px 2px black;
+  height: 25px;
+}

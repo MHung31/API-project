@@ -3,9 +3,13 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./SpotDetails.css";
 import { addSpotDetailsThunk } from "../../spotsDetails";
+import OpenModalMenuItem from "../OpenModalButton";
+import ReviewFormModal from "../ReviewFormModal";
+import { useModal } from "../../../context/Modal";
 
 export default () => {
   const dispatch = useDispatch();
+  const { setModalContent, setOnModalClose } = useModal();
   const { id } = useParams();
   const spotDetails = useSelector((state) => state.spotsDetails[id]);
   let previewImage = "";
@@ -15,9 +19,9 @@ export default () => {
     alert("Feature coming soon");
   };
 
-  const SubmitReview= (e)=> {
-    alert("Feature coming soon");
-  }
+  const SubmitReview = (e) => {
+    setModalContent(<ReviewFormModal/>)
+  };
 
   useEffect(() => {
     dispatch(addSpotDetailsThunk(id));
@@ -92,9 +96,10 @@ export default () => {
         <h3>
           <i class="fa-solid fa-star" /> {rating}
         </h3>
-        <button id='post-review-button' onClick={SubmitReview}>Post Your Review</button>
+        <button id="post-review-button" onClick={SubmitReview}>
+          Post Your Review
+        </button>
       </div>
-
     </>
   );
 };
