@@ -103,7 +103,6 @@ export default () => {
       errors.image3 = "Image URL needs to end in pgn or jpg (or jpeg)";
     if (image4 && !imageTypes.includes(image4.split(".").at(-1)))
       errors.image4 = "Image URL needs to end in pgn or jpg (or jpeg)";
-    // if (!Object.keys(errors).length) setButton(false);
     setValidationErrors(errors);
   }, [
     country,

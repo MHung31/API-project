@@ -1,5 +1,6 @@
 import { csrfFetch } from "./csrf";
 const GET_REVIEWS = "reviews/getSpotReviews";
+// const ADD_REVIEW = "reviews/addReview";
 
 const getReviews = (spotReviews) => {
   return {
@@ -7,6 +8,13 @@ const getReviews = (spotReviews) => {
     payload: spotReviews,
   };
 };
+
+// const addReview = (newReview) => {
+//   return {
+//     type: addReview,
+//     payload: newReview,
+//   };
+// };
 
 export const getReviewsThunk = (spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}/reviews`);
@@ -18,6 +26,21 @@ export const getReviewsThunk = (spotId) => async (dispatch) => {
     return data;
   } else {
     const errors = await response.json();
+    return errors;
+  }
+};
+
+export const addReviewThunk = (review, spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+    method: "POST",
+    body: JSON.stringify(review),
+  });
+
+  if (response.ok) {
+    const data = response.json();
+    return data;
+  } else {
+    const errors = response.json();
     return errors;
   }
 };

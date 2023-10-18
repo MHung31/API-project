@@ -20,7 +20,7 @@ export default () => {
   };
 
   const SubmitReview = (e) => {
-    setModalContent(<ReviewFormModal/>)
+    setModalContent(<ReviewFormModal spotId={id}/>)
   };
 
   useEffect(() => {
