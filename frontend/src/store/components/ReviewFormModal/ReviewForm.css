@@ -7,6 +7,10 @@
   box-shadow: 3px 3px black;
 }
 
+.review-form > button:disabled {
+  background-color: lightgray;
+}
+
 .review-form {
   border: 5px black solid;
   border-radius: 10px;

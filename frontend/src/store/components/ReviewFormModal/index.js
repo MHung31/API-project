@@ -16,6 +16,7 @@ const ReviewFormModal = ({ spotId }) => {
   const [tempRating, setTempRating] = useState(0);
   const [validationErrors, setValidationErrors] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
   const stars = ["regular", "regular", "regular", "regular", "regular"];
   for (let i = 0; i < rating; i++) {
@@ -45,7 +46,7 @@ const ReviewFormModal = ({ spotId }) => {
       setValidationErrors(response.message);
     } else {
       dispatch(getReviewsThunk(spotId));
-      dispatch(addSpotDetailsThunk(spotId))
+      dispatch(addSpotDetailsThunk(spotId));
       closeModal();
     }
   };
@@ -54,6 +55,9 @@ const ReviewFormModal = ({ spotId }) => {
     setValidationErrors("");
     if (!rating) setValidationErrors("Rating is required");
     if (!review) setValidationErrors("Review is required");
+    review.length < 10 || !rating
+      ? setButtonDisabled(true)
+      : setButtonDisabled(false);
   }, [review, rating]);
 
   return (
@@ -100,7 +104,7 @@ const ReviewFormModal = ({ spotId }) => {
         <span>Stars</span>
       </div>
 
-      <button>Submit Your Review</button>
+      <button disabled={buttonDisabled}>Submit Your Review</button>
     </form>
   );
 };
