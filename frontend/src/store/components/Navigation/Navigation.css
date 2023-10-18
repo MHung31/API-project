@@ -31,3 +31,49 @@ a {
 .logo > i {
   font-size: 30px;
 }
+
+.profile-dropdown:not(.hidden) {
+  position: absolute;
+  background-color: white;
+  border: 2px black solid;
+  border-radius: 2px;
+  top: 50px;
+  right: 17px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-dropdown > li > a {
+  color: black;
+}
+
+#menu-button {
+  background-color: white;
+  border: 2px black solid;
+  border-radius: 20px;
+  height: 30px;
+  width: 60px;
+}
+
+#menu-button > i {
+  font-size: 15px;
+  margin: 0px 2px;
+}
+
+.profile-separator {
+  border-bottom: black solid 1px;
+  margin: 5px 0px;
+}
+
+#logout-button {
+  background-color: gray;
+  color: white;
+  border: 2px black solid;
+  border-radius: 20px;
+  height: 30px;
+}
+
+#logout-button-container {
+  display: flex;
+  justify-content: center;
+}

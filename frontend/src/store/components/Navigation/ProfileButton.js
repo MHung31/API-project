@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../session";
-import OpenModalMenuItem from './OpenModalMenuItem'
-import LoginFormModal from '../LoginFormModal';
-import SignupFormModal from '../SignupFormModal';
+import OpenModalMenuItem from "./OpenModalMenuItem";
+import LoginFormModal from "../LoginFormModal";
+import SignupFormModal from "../SignupFormModal";
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -24,7 +25,7 @@ function ProfileButton({ user }) {
       }
     };
 
-    document.addEventListener('click', closeMenu);
+    document.addEventListener("click", closeMenu);
 
     return () => document.removeEventListener("click", closeMenu);
   }, [showMenu]);
@@ -41,17 +42,27 @@ function ProfileButton({ user }) {
 
   return (
     <>
-      <button onClick={openMenu}>
+      <button id="menu-button" onClick={openMenu}>
+        <i class="fa-solid fa-bars" />
         <i className="fas fa-user-circle" />
       </button>
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+            <li>{`Hello, ${user.firstName}`}</li>
             <li>{user.email}</li>
+            <li className="profile-separator" />
             <li>
-              <button onClick={logout}>Log Out</button>
+              <Link to="/spots/current">Manage Spots</Link>
+            </li>
+            <li>
+              <Link to="/reviews/current">Manage Reviews</Link>
+            </li>
+            <li className="profile-separator" />
+            <li id="logout-button-container">
+              <button id="logout-button" onClick={logout}>
+                Log Out
+              </button>
             </li>
           </>
         ) : (
