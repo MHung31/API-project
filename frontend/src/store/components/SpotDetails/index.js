@@ -19,7 +19,7 @@ export default () => {
     dispatch(addSpotDetailsThunk(id));
   }, [dispatch, id]);
 
-  if (!spotDetails) return <div>Spot Loading...</div>;
+  if (!spotDetails) return <div></div>;
 
   const {
     name,

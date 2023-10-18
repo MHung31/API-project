@@ -32,8 +32,11 @@
   color: white;
   font-weight: bold;
   text-shadow: 1px 1px black;
+  opacity: 0;
+  transition: opacity .5s;
 }
 
 .previewImage:hover .spot-name {
   visibility: visible;
+  opacity: 1;
 }

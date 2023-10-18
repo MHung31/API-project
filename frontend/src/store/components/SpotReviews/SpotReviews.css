@@ -1,0 +1,21 @@
+.reviews {
+  border-top: 1px black solid;
+  margin: 0 auto;
+  width: 1000px;
+}
+
+.userReview > h4 {
+  margin: 5px 0px;
+}
+.userReview > h5 {
+  margin: 5px 0px;
+  color: gray;
+}
+
+.userReview > p {
+  margin: 5px 0px;
+}
+
+.userReview {
+  margin-bottom: 30px;
+}

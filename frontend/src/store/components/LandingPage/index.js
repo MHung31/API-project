@@ -11,7 +11,7 @@ export default () => {
   useEffect(() => {
     dispatch(getAllSpotsThunk());
   }, [dispatch]);
-  if (!allSpots) return <div>Loading Spots...</div>;
+  if (!allSpots) return <div></div>;
   return (
     <div className="index">
       {Object.values(allSpots).map((spot) => {

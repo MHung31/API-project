@@ -7,6 +7,7 @@ import Navigation from "./store/components/Navigation";
 import CreateSpot from "./store/components/CreateSpot";
 import SpotDetails from "./store/components/SpotDetails";
 import LandingPage from "./store/components/LandingPage";
+import SpotReviews from "./store/components/SpotReviews";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
           </Route>
           <Route path="/spots/:id">
             <SpotDetails />
+            <SpotReviews />
           </Route>
         </Switch>
       )}
