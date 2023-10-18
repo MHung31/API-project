@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 import "./CreateSpot.css";
 import { newSpotThunk } from "../../spots";
 import { addSpotImageThunk } from "../../images";
 
 export default () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
@@ -70,6 +72,7 @@ export default () => {
         setImage2("");
         setImage3("");
         setImage4("");
+        history.push(`/spots/${spotId}`);
         // setButton(true);
       }
     }

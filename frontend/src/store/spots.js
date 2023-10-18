@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const NEW_SPOT = "spots/new";
 const GET_ALL_SPOTS = "spots/ALL";
+const GET_SPOT_DETAILS = "spots/detail";
 
 const newSpot = (spot) => {
   return {
@@ -14,6 +15,13 @@ const getAllSpots = (spots) => {
   return {
     type: GET_ALL_SPOTS,
     payload: spots,
+  };
+};
+
+const getSpotDetails = (id) => {
+  return {
+    type: GET_SPOT_DETAILS,
+    payload: id,
   };
 };
 
@@ -39,6 +47,18 @@ export const getAllSpotsThunk = () => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(getAllSpots(data.Spots));
+    return data;
+  } else {
+    const error = await response.json();
+    return error;
+  }
+};
+
+export const getSpotDetailsThunk = (spotId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/spots/${spotId}`);
+
+  if (response.ok) {
+    const data = await response.json();
     return data;
   } else {
     const error = await response.json();
