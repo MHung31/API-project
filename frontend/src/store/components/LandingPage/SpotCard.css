@@ -19,8 +19,9 @@
 .location-price {
   width: 230px;
 }
-.rating {
+.landing-rating {
   width: 70px;
+  text-align: end;
 }
 
 .spot-name {
@@ -33,7 +34,7 @@
   font-weight: bold;
   text-shadow: 1px 1px black;
   opacity: 0;
-  transition: opacity .5s;
+  transition: opacity 0.5s;
 }
 
 .previewImage:hover .spot-name {

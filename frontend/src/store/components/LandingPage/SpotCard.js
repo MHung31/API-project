@@ -3,9 +3,13 @@ import "./SpotCard.css";
 
 export default ({ spot }) => {
   let { name, id, previewImage, city, state, price, avgRating } = spot;
+  console.log(avgRating)
   const handleClick = () => {};
-  if ((avgRating = "There are currently no reviews for this spot"))
-    avgRating = "New";
+  const rating =
+  avgRating === "There are currently no reviews for this spot"
+      ? "New"
+      : `${(Math.round(avgRating * 10) / 10).toFixed(2)}`;
+
   return (
     <div className="card" onClick={handleClick()}>
       <Link to={`/spots/${id}`}>
@@ -18,8 +22,8 @@ export default ({ spot }) => {
             <div>{`${city}, ${state}`}</div>
             <div>{`$${price} night`} </div>
           </div>
-          <div className="rating">
-            <i class="fa-solid fa-star" /> {avgRating}
+          <div className="landing-rating">
+            <i class="fa-solid fa-star" /> {rating}
           </div>
         </div>
       </Link>
