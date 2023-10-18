@@ -11,6 +11,10 @@ export default () => {
   let previewImage = "";
   const otherImages = [];
 
+  const handleClick = (e) => {
+    alert("Feature coming soon");
+  };
+
   useEffect(() => {
     dispatch(addSpotDetailsThunk(id));
   }, [dispatch, id]);
@@ -63,10 +67,13 @@ export default () => {
 
         <div className="reserve">
           <div className="reserveDetails">
-            <div>{`$${price} `}<span>night</span></div>
+            <div>
+              {`$${price} `}
+              <span>night</span>
+            </div>
             <div>{`*New`}</div>
           </div>
-          <button>Reserve</button>
+          <button onClick={handleClick}>Reserve</button>
         </div>
       </div>
     </div>
