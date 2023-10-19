@@ -6,9 +6,8 @@
 .manage-spots-index {
   display: grid;
   grid-template-columns: repeat(4, 25%);
+  
   margin: 20px auto;
-  width: 1250px;
-  justify-items: center;
 }
 
 .manage-spots button {
