@@ -12,6 +12,7 @@ export default () => {
   const { setModalContent, setOnModalClose } = useModal();
   const { id } = useParams();
   const spotDetails = useSelector((state) => state.spotsDetails[id]);
+  const spotReviews = useSelector((state) => state.reviews);
   let previewImage = "";
   const otherImages = [];
 
@@ -25,7 +26,7 @@ export default () => {
 
   useEffect(() => {
     dispatch(addSpotDetailsThunk(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, spotReviews]);
 
   if (!spotDetails) return <div></div>;
 
@@ -66,7 +67,7 @@ export default () => {
             <img src={previewImage} alt="Preview Image" />
           </div>
           <div id="otherImages">
-            {otherImages.map( (image) => {
+            {otherImages.map((image) => {
               return <img src={image} alt="No Image" />;
             })}
           </div>

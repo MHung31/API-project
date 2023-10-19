@@ -9,10 +9,12 @@ export default ({ type, deleteFunc, id }) => {
   let message = "";
   if (type === "Spot")
     message = "Are you sure you want to remove this spot from the listings?";
-
+  if (type === "Review")
+    message = "Are you sure you want to delete this review?";
   const confirmYesClick = async () => {
     dispatch(deleteFunc(id));
     closeModal();
+
   };
 
   return (
