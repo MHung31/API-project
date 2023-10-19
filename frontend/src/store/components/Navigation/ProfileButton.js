@@ -56,10 +56,10 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li className="profile-separator" />
             <li>
-              <Link to="/spots/current">Manage Spots</Link>
+              <Link to="/spots/current" onClick={closeMenu}>Manage Spots</Link>
             </li>
             <li>
-              <Link to="/reviews/current">Manage Reviews</Link>
+              <Link to="/reviews/current" onClick={closeMenu}>Manage Reviews</Link>
             </li>
             <li className="profile-separator" />
             <li id="logout-button-container">
