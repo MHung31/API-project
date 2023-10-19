@@ -16,10 +16,22 @@ export default () => {
 
   const updateClick = (id) => {
     return function () {
-      // dispatch(addSpotDetailsThunk(id))
-      history.push(`/spots/${id}/edit`)
+      history.push(`/spots/${id}/edit`);
     };
+  };
 
+  const deleteClick = (id) => {
+    return function () {
+      //delete spot delete pot spot thunk
+      //delete it from redux store and also call to remove it from db
+      //add useEffect to rerender if number of spots are different
+    };
+  };
+
+  const createClick = () => {
+
+      history.push("/spots/new");
+    
   };
 
   if (!userSpots) return <div></div>;
@@ -27,7 +39,7 @@ export default () => {
   return (
     <div className="manage-spots">
       <h2> Manage Your Spots</h2>
-      <button>Create a New Spot</button>
+      <button onClick={createClick}>Create a New Spot</button>
       <div className="manage-spots-index">
         {Object.values(userSpots).map((spot) => {
           return (
