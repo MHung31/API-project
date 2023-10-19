@@ -3,7 +3,6 @@ import "./SpotCard.css";
 
 export default ({ spot }) => {
   let { name, id, previewImage, city, state, price, avgRating } = spot;
-  console.log(avgRating)
   const handleClick = () => {};
   const rating =
   avgRating === "There are currently no reviews for this spot"

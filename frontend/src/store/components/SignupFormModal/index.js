@@ -34,7 +34,6 @@ function SignupFormModal() {
         password,
       })
     );
-    console.log(response);
     if (response.errors) {
       setErrors(response.errors);
     } else {
