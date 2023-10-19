@@ -35,11 +35,13 @@ img {
 
 .description > h2 {
   margin-top: 0px;
+
 }
 
 .description {
   box-sizing: border-box;
   padding-right: 20px;
+  word-wrap: break-word;
 }
 
 .description {
