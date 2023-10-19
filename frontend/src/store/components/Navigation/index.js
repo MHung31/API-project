@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
+
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector((state) => state.session.user);
 
@@ -18,8 +19,8 @@ function Navigation({ isLoaded }) {
       </li>
       {isLoaded && (
         <>
-          <li>
-            <NavLink exact to="/spots/new">
+          <li >
+            <NavLink hidden={!sessionUser} exact to="/spots/new">
               Create a New Spot
             </NavLink>
             <ProfileButton user={sessionUser} />

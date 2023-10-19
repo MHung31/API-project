@@ -19,20 +19,6 @@ module.exports = {
           lastName: "Lition",
           hashedPassword: bcrypt.hashSync("password"),
         },
-        {
-          email: "user1@user.io",
-          username: "FakeUser1",
-          firstName: "Fake",
-          lastName: "User1",
-          hashedPassword: bcrypt.hashSync("password2"),
-        },
-        {
-          email: "user2@user.io",
-          username: "FakeUser2",
-          firstName: "Fake",
-          lastName: "User2",
-          hashedPassword: bcrypt.hashSync("password3"),
-        },
       ],
       { validate: true }
     );
@@ -44,7 +30,7 @@ module.exports = {
     return queryInterface.bulkDelete(
       options,
       {
-        username: { [Op.in]: ["Demo-lition", "FakeUser1", "FakeUser2"] },
+        username: { [Op.in]: ["Demo-lition"] },
       },
       {}
     );
