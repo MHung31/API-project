@@ -22,7 +22,7 @@ function LoginFormModal() {
       sessionActions.login({ credential, password })
     );
     if (response.message) {
-      setErrors(response.message);
+      setErrors("The provided credentials were invalid");
     } else {
       closeModal();
       history.push("/");
@@ -35,7 +35,8 @@ function LoginFormModal() {
 
   useEffect(() => {
     setButtonDisabled(true);
-    if (credential.length >= 4 && password.length >= 6) setButtonDisabled(false);
+    if (credential.length >= 4 && password.length >= 6)
+      setButtonDisabled(false);
   }, [credential, password]);
 
   return (

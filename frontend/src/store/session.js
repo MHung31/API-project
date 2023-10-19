@@ -36,9 +36,15 @@ export const signup = (user) => async (dispatch) => {
       password,
     }),
   });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(setUser(data.user));
+    return data;
+  } else {
+    const errors = await response.json();
+    return errors;
+  }
 };
 
 export const restoreUser = () => async (dispatch) => {

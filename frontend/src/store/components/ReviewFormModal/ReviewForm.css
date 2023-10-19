@@ -9,6 +9,7 @@
 
 .review-form > button:disabled {
   background-color: lightgray;
+  color: gray;
 }
 
 .review-form {

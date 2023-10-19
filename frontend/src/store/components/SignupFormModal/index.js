@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../../context/Modal";
 import * as sessionActions from "../../session";
@@ -6,6 +7,7 @@ import "./SignupForm.css";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -14,40 +16,46 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+  const [buttonDisabled, setButtonDisabled] = useState(true);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
-      setErrors({});
-      return dispatch(
-        sessionActions.signup({
-          email,
-          username,
-          firstName,
-          lastName,
-          password,
-        })
-      )
-        .then(closeModal)
-        .catch(async (res) => {
-          const data = await res.json();
-          if (data && data.errors) {
-            setErrors(data.errors);
-          }
-        });
+    setErrors({});
+    if (password !== confirmPassword) {
+      setErrors({ password: "Passwords must match" });
+      return;
     }
-    return setErrors({
-      confirmPassword:
-        "Confirm Password field must be the same as the Password field",
-    });
+    const response = await dispatch(
+      sessionActions.signup({
+        email,
+        username,
+        firstName,
+        lastName,
+        password,
+      })
+    );
+    console.log(response);
+    if (response.errors) {
+      setErrors(response.errors);
+    } else {
+      closeModal();
+      history.push("/");
+    }
   };
+  useEffect(() => {
+    setButtonDisabled(true);
+    if ((email, username, firstName, lastName, password, confirmPassword))
+      setButtonDisabled(false);
+  }, [email, username, firstName, lastName, password, confirmPassword]);
 
   return (
     <div id="signup-form">
       <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email</label>
+          <label>
+            Email <span className="signupErrors">{errors.email}</span>
+          </label>
           <input
             type="text"
             value={email}
@@ -55,19 +63,20 @@ function SignupFormModal() {
             required
           />
 
-          {errors.email && <p>{errors.email}</p>}
-          <label>Username</label>
+          <label>
+            Username <span className="signupErrors">{errors.username}</span>
+          </label>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-
-          {errors.username && <p>{errors.username}</p>}
         </div>
         <div>
-          <label>First Name</label>
+          <label>
+            First Name <span className="signupErrors">{errors.firstName}</span>
+          </label>
           <input
             type="text"
             value={firstName}
@@ -75,18 +84,18 @@ function SignupFormModal() {
             required
           />
 
-          {errors.firstName && <p>{errors.firstName}</p>}
-          <label>Last Name</label>
+          <label>
+            Last Name <span className="signupErrors">{errors.lastName}</span>
+          </label>
           <input
             type="text"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
             required
           />
-
-          {errors.lastName && <p>{errors.lastName}</p>}
         </div>
         <div>
+          <div className="signupErrors">{errors.password}</div>
           <label>Password</label>
           <input
             type="password"
@@ -95,7 +104,6 @@ function SignupFormModal() {
             required
           />
 
-          {errors.password && <p>{errors.password}</p>}
           <label>Confirm Password</label>
           <input
             type="password"
@@ -104,8 +112,9 @@ function SignupFormModal() {
             required
           />
         </div>
-        {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button disabled={buttonDisabled} type="submit">
+          Sign Up
+        </button>
       </form>
     </div>
   );

@@ -51,4 +51,5 @@
 
 #loginForm > form > button:disabled {
   background-color: lightgray;
+  color: gray;
 }

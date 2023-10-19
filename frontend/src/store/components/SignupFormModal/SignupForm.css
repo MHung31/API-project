@@ -44,3 +44,14 @@
 #signup-form > form > button {
   cursor: pointer;
 }
+
+#signup-form > form > button:disabled {
+  background-color: lightgray;
+  color: gray;
+}
+
+.signupErrors {
+  color: red;
+  font-size: 12px;
+  height: 14px;
+}
