@@ -20,7 +20,7 @@ export default () => {
   };
 
   const SubmitReview = (e) => {
-    setModalContent(<ReviewFormModal spotId={id}/>)
+    setModalContent(<ReviewFormModal spotId={id} />);
   };
 
   useEffect(() => {
@@ -48,6 +48,7 @@ export default () => {
       : `${(Math.round(avgStarRating * 10) / 10).toFixed(2)} • ${numReviews} ${
           numReviews === 1 ? "Review" : "Reviews"
         }`;
+
   SpotImages.forEach((image) => {
     if (image.preview) {
       previewImage = image.url;
@@ -65,7 +66,7 @@ export default () => {
             <img src={previewImage} alt="Preview Image" />
           </div>
           <div id="otherImages">
-            {otherImages.map((image) => {
+            {otherImages.map( (image) => {
               return <img src={image} alt="No Image" />;
             })}
           </div>

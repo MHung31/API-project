@@ -1,11 +1,11 @@
-.create-spot-form {
+.update-spot-form {
     display: flex;
     flex-direction: column;
     width: 500px;
     margin: 0 auto;
   }
 
-  .create-spot-form > form > div,
+  .update-spot-form > form > div,
   #city-state-input > div,
   #lat-lng-input > div,
   .location > div {
@@ -29,12 +29,12 @@
     color: rgb(174, 174, 174);
   }
 
-  .create-spot-form > form > h2 {
+  .update-spot-form > form > h2 {
     margin: 0px auto;
   }
 
   .location > h3,
-  .create-description > h3,
+  .update-description > h3,
   .name > h3,
   .price > h3,
   .images,
@@ -43,15 +43,15 @@
   }
 
   .location > p,
-  .create-description > p,
+  .update-description > p,
   .name > p,
   .price > p,
   .images > p {
     margin-top: 5px;
   }
 
-  .create-spot-form input,
-  .create-spot-form textarea {
+  .update-spot-form input,
+  .update-spot-form textarea {
     border: 3px black solid;
     height: 30px;
 
@@ -61,7 +61,7 @@
     margin-bottom: 10px;
   }
 
-  .create-spot-form button {
+  .update-spot-form button {
     margin: 20px auto;
     height: 30px;
     background-color: rgba(255, 0, 0, 0.592);
@@ -71,7 +71,7 @@
   }
 
   .location,
-  .create-description,
+  .update-description,
   .name,
   .price,
   .images {
@@ -91,15 +91,15 @@
     font-size: 20px;
   }
 
-  .create-spot-form #city {
+  .update-spot-form #city {
     width: 340px;
   }
 
-  .create-spot-form #state {
+  .update-spot-form #state {
     width: 100%;
   }
 
-  .create-spot-form #latitude,
-  .create-spot-form #longitude {
+  .update-spot-form #latitude,
+  .update-spot-form #longitude {
     width: 244px;
   }

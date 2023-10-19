@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory, useParams } from "react-router-dom";
 import "./UpdateSpot.css";
-import { newSpotThunk } from "../../spots";
-import { addSpotImageThunk } from "../../images";
+import { updateSpotThunk } from "../../spots";
+import { addSpotImageThunk, deleteSpotImagesThunk } from "../../images";
 import { addSpotDetailsThunk } from "../../spotsDetails";
 
 export default () => {
@@ -34,22 +34,26 @@ export default () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (!spotDetails) return
-      setCountry(spotDetails.country);
-      setAddress(spotDetails.address)
-setCity(spotDetails.city)
-setState(spotDetails.state)
-setLat(spotDetails.lat)
-setLng(spotDetails.lng)
-setDescription(spotDetails.description)
-setName(spotDetails.name)
-setPrice(spotDetails.price)
-// setPreviewImage(spotDetails.)
-// setImage1(spotDetails.)
-// setImage2(spotDetails.)
-// setImage3(spotDetails.)
-// setImage4(spotDetails.)
-
+    if (!spotDetails) return;
+    const images = [];
+    setCountry(spotDetails.country);
+    setAddress(spotDetails.address);
+    setCity(spotDetails.city);
+    setState(spotDetails.state);
+    setLat(spotDetails.lat);
+    setLng(spotDetails.lng);
+    setDescription(spotDetails.description);
+    setName(spotDetails.name);
+    setPrice(spotDetails.price);
+    Object.values(spotDetails.SpotImages).forEach((image) => {
+      if (image.preview) {
+        setPreviewImage(image.url);
+      } else images.push(image.url);
+    });
+    if (images[0]) setImage1(images[0]);
+    if (images[1]) setImage2(images[1]);
+    if (images[2]) setImage3(images[2]);
+    if (images[3]) setImage4(images[3]);
   }, [spotDetails]);
 
   useEffect(() => {
@@ -118,12 +122,16 @@ setPrice(spotDetails.price)
     if (image4) images.push({ url: image4, preview: false });
 
     if (!Object.keys(validationErrors).length) {
-      const response = await dispatch(newSpotThunk(newSpot));
+      const response = await dispatch(updateSpotThunk(id, newSpot));
       if (response.errors && Object.values(response.errors).length) {
         setValidationErrors(response.errors);
       } else {
-        const spotId = response.id;
-        dispatch(addSpotImageThunk(images, spotId));
+        const oldImages = Object.values(spotDetails.SpotImages).map(
+          (image) => image.id
+        );
+        dispatch(deleteSpotImagesThunk(oldImages))
+          .then(() => dispatch(addSpotImageThunk(images, id)))
+          .then(() => history.push(`/spots/${id}`));
 
         // setValidationErrors({});
         // setAddress("");
@@ -141,16 +149,16 @@ setPrice(spotDetails.price)
         // setImage2("");
         // setImage3("");
         // setImage4("");
-        history.push(`/spots/${spotId}`);
+
         // setButton(true);
       }
     }
   };
 
   return (
-    <div className="create-spot-form">
+    <div className="update-spot-form">
       <form onSubmit={onSubmit}>
-        <h2>Create a new Spot </h2>
+        <h2>Update your Spot </h2>
         <div className="location">
           <h3> Where's your place located?</h3>
           <p>
@@ -259,7 +267,7 @@ setPrice(spotDetails.price)
           </div>
         </div>
 
-        <div className="create-description">
+        <div className="update-description">
           <h3>Describe your place to guests</h3>
           <p>
             Mention the best features of your space, any special amentities like
@@ -373,7 +381,7 @@ setPrice(spotDetails.price)
           </div>
         </div>
         <div>
-          <button>Create Spot</button>
+          <button>Update Spot</button>
         </div>
       </form>
     </div>

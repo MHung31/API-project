@@ -14,7 +14,7 @@ export const addSpotDetailsThunk = (spotId) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-
+    console.log(data);
     dispatch(addSpot(data));
     return data;
   } else {
