@@ -38,5 +38,9 @@
 }
 
 #signup-form > form > div {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
+}
+
+#signup-form > form > button {
+  cursor: pointer;
 }

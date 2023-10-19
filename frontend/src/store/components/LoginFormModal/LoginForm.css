@@ -15,7 +15,6 @@
 
 #loginForm > h1 {
   margin: 0px 0px;
-  margin-bottom: 15px;
   text-align: center;
 }
 
@@ -41,4 +40,15 @@
 #loginForm > h3:hover,
 #loginForm > form > button {
   cursor: pointer;
+}
+
+#login-error {
+  color: red;
+  text-align: center;
+  margin: 5px 0px;
+  height: 15px;
+}
+
+#loginForm > form > button:disabled {
+  background-color: lightgray;
 }

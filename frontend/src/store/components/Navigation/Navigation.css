@@ -47,12 +47,17 @@ a {
   color: black;
 }
 
+#menu-button:hover {
+  cursor: pointer;
+}
+
 #menu-button {
   background-color: white;
   border: 2px black solid;
   border-radius: 20px;
   height: 30px;
   width: 60px;
+  margin-left: 20px;
 }
 
 #menu-button > i {
