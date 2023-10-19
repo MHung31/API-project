@@ -35,7 +35,6 @@ img {
 
 .description > h2 {
   margin-top: 0px;
-
 }
 
 .description {
@@ -68,8 +67,7 @@ img {
   margin-bottom: 16px;
 }
 
-.reserve > button
- {
+.reserve > button {
   margin: 10px 0px;
   height: 40px;
   background-color: rgba(255, 0, 0, 0.592);
@@ -89,10 +87,14 @@ img {
 }
 
 #post-review-button {
-  margin: 20px 0px;
+
   background-color: rgb(72, 72, 72);
   color: white;
   border: 1px black solid;
   box-shadow: 2px 2px black;
   height: 25px;
+}
+
+#review-details-header > h3 {
+  margin: 20px 0px;
 }

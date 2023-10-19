@@ -8,6 +8,8 @@ import ReviewFormModal from "../ReviewFormModal";
 import { useModal } from "../../../context/Modal";
 
 export default () => {
+  const sessionUser = useSelector((state) => state.session.user);
+  console.log(sessionUser);
   const dispatch = useDispatch();
   const { setModalContent, setOnModalClose } = useModal();
   const { id } = useParams();
@@ -98,7 +100,11 @@ export default () => {
         <h3>
           <i class="fa-solid fa-star" /> {rating}
         </h3>
-        <button id="post-review-button" onClick={SubmitReview}>
+        <button
+          id="post-review-button"
+          onClick={SubmitReview}
+          hidden={!sessionUser}
+        >
           Post Your Review
         </button>
       </div>
