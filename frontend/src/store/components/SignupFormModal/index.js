@@ -43,7 +43,7 @@ function SignupFormModal() {
   };
   useEffect(() => {
     setButtonDisabled(true);
-    if ((email, username, firstName, lastName, password, confirmPassword))
+    if ((email && username && firstName && lastName && password && confirmPassword))
       setButtonDisabled(false);
   }, [email, username, firstName, lastName, password, confirmPassword]);
 
