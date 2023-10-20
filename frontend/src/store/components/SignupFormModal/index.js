@@ -43,7 +43,17 @@ function SignupFormModal() {
   };
   useEffect(() => {
     setButtonDisabled(true);
-    if ((email && username && firstName && lastName && password && confirmPassword))
+    if (
+      email &&
+      username &&
+      firstName &&
+      lastName &&
+      password &&
+      confirmPassword &&
+      username.length >= 4 &&
+      confirmPassword.length >= 6 &&
+      password.length >= 6
+    )
       setButtonDisabled(false);
   }, [email, username, firstName, lastName, password, confirmPassword]);
 

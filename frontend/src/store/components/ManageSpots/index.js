@@ -1,18 +1,20 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { getUserSpotsThunk, deleteSpotThunk } from "../../spots";
 import SpotCard from "../LandingPage/SpotCard";
 import "./ManageSpots.css";
 import { addSpotDetailsThunk } from "../../spotsDetails";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
-import {useModal} from '../../../context/Modal'
+import { useModal } from "../../../context/Modal";
 
 export default () => {
   const { setModalContent } = useModal();
   const dispatch = useDispatch();
   const history = useHistory();
   const userSpots = useSelector((state) => state.spots);
+  const sessionUser = useSelector((state) => state.session.user);
+  const [userHasSpots, setUserHasSpots] = useState(false);
   useEffect(() => {
     dispatch(getUserSpotsThunk());
   }, [dispatch]);
@@ -25,9 +27,9 @@ export default () => {
 
   const deleteClick = (id) => {
     return function () {
-
-      setModalContent(<ConfirmDeleteModal type='Spot' deleteFunc={deleteSpotThunk} id={id}/>)
-
+      setModalContent(
+        <ConfirmDeleteModal type="Spot" deleteFunc={deleteSpotThunk} id={id} />
+      );
     };
   };
 
@@ -37,10 +39,23 @@ export default () => {
 
   if (!userSpots) return <div></div>;
 
+  useEffect(() => {
+    setUserHasSpots(false);
+    if (userSpots) {
+      Object.values(userSpots).forEach((spot) => {
+        if (spot.ownerId === sessionUser.id) {
+          setUserHasSpots(true);
+        }
+      });
+    }
+  }, [userSpots]);
+
   return (
     <div className="manage-spots">
       <h2> Manage Your Spots</h2>
-      <button onClick={createClick}>Create a New Spot</button>
+      <button hidden={userHasSpots} onClick={createClick}>
+        Create a New Spot
+      </button>
       <div className="manage-spots-index">
         {Object.values(userSpots).map((spot) => {
           return (
