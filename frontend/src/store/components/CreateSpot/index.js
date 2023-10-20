@@ -49,34 +49,16 @@ export default () => {
     if (image4) images.push({ url: image4, preview: false });
 
     if (!Object.keys(validationErrors).length) {
-      const response = await dispatch(newSpotThunk(newSpot));
-      if (response.errors && Object.values(response.errors).length) {
-        setValidationErrors(response.errors);
-      } else {
-        const spotId = response.id;
-        dispatch(addSpotImageThunk(images, spotId)).then(() =>
-          history.push(`/spots/${spotId}`)
-        );
-
-        // setValidationErrors({});
-        // setAddress("");
-        // setCity("");
-        // setState("");
-        // setCountry("");
-        // setLat("");
-        // setLng("");
-        // setName("");
-        // setDescription("");
-        // setPrice("");
-        // setSubmitted(false);
-        // setPreviewImage("");
-        // setImage1("");
-        // setImage2("");
-        // setImage3("");
-        // setImage4("");
-
-        // setButton(true);
-      }
+      const response = await dispatch(newSpotThunk(newSpot)).then((res) => {
+        if (res.errors && Object.values(res.errors).length) {
+          setValidationErrors(res.errors);
+        } else {
+          const spotId = res.id;
+          dispatch(addSpotImageThunk(images, spotId)).then(() =>
+            history.push(`/spots/${spotId}`)
+          );
+        }
+      });
     }
   };
 
