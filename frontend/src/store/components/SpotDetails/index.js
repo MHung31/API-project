@@ -9,7 +9,6 @@ import { useModal } from "../../../context/Modal";
 
 export default () => {
   const sessionUser = useSelector((state) => state.session.user);
-  console.log(sessionUser);
   const dispatch = useDispatch();
   const { setModalContent, setOnModalClose } = useModal();
   const { id } = useParams();
@@ -58,11 +57,16 @@ export default () => {
     } else otherImages.push(image.url);
   });
 
-  const hideSubmitReview = ()=> {
-    if(!sessionUser || sessionUser.id ===Owner.id) return true;
+  const hideSubmitReview = () => {
+    const didNotLeaveReview = Object.values(spotReviews).every(
+      (review) => review.userId !== sessionUser.id
+    );
+    console.log(didNotLeaveReview);
 
-    return false
-  }
+    if (!sessionUser || sessionUser.id === Owner.id || !didNotLeaveReview) return true;
+
+    return false;
+  };
 
   return (
     <>

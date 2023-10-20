@@ -1,10 +1,11 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useModal } from "../../../context/Modal";
 import ConfirmDeleteModal from "../ConfirmDeleteModal";
 import { deleteReviewThunk } from "../../reviews";
 import { useHistory } from "react-router-dom";
 
 export default ({ reviewDetails }) => {
+  const sessionUser = useSelector((state) => state.session.user);
   const history = useHistory();
   const { setModalContent } = useModal();
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export default ({ reviewDetails }) => {
     "November",
     "December",
   ];
-  const { review, createdAt } = reviewDetails;
+  const { review, createdAt, userId } = reviewDetails;
   const { firstName } = reviewDetails.User;
   const date = createdAt.split("-");
   const year = date[0];
@@ -36,15 +37,16 @@ export default ({ reviewDetails }) => {
         id={reviewDetails.id}
       />
     );
-    
   };
   return (
     <div className="userReview">
       <h4>{firstName}</h4>
       <h5>{`${month} ${year}`}</h5>
       <p>{review}</p>
-      <button>Update</button>{" "}
-      <button onClick={deleteReviewClick}>Delete</button>
+      <button hidden={sessionUser.id !== userId}>Update</button>{" "}
+      <button hidden={sessionUser.id !== userId} onClick={deleteReviewClick}>
+        Delete
+      </button>
     </div>
   );
 };
