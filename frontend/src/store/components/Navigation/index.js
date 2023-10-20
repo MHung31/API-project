@@ -13,7 +13,7 @@ function Navigation({ isLoaded }) {
       <li id="logo">
         <NavLink exact to="/">
           <div className="logo">
-            <i class="fa-brands fa-airbnb" /> <span>airbnb</span>
+            <i class="fa-brands fa-airbnb fa-rotate-270" /> <span>airbnb</span>
           </div>
         </NavLink>
       </li>

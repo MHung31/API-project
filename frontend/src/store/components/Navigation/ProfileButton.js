@@ -60,11 +60,11 @@ function ProfileButton({ user }) {
                 Manage Spots
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link to="/reviews/current" onClick={closeMenu}>
                 Manage Reviews
               </Link>
-            </li>
+            </li> */}
             <li className="profile-separator" />
             <li id="logout-button-container">
               <button id="logout-button" onClick={logout}>
