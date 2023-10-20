@@ -43,8 +43,8 @@ export default ({ reviewDetails }) => {
       <h4>{firstName}</h4>
       <h5>{`${month} ${year}`}</h5>
       <p>{review}</p>
-      <button hidden={sessionUser.id !== userId}>Update</button>{" "}
-      <button hidden={sessionUser.id !== userId} onClick={deleteReviewClick}>
+      <button hidden={!sessionUser || sessionUser.id !== userId}>Update</button>{" "}
+      <button hidden={!sessionUser || sessionUser.id !== userId} onClick={deleteReviewClick}>
         Delete
       </button>
     </div>

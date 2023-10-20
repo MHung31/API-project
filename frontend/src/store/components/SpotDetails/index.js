@@ -6,6 +6,7 @@ import { addSpotDetailsThunk } from "../../spotsDetails";
 import OpenModalMenuItem from "../OpenModalButton";
 import ReviewFormModal from "../ReviewFormModal";
 import { useModal } from "../../../context/Modal";
+import SpotReviewsComponent from "../SpotReviews";
 
 export default () => {
   const sessionUser = useSelector((state) => state.session.user);
@@ -58,12 +59,14 @@ export default () => {
   });
 
   const hideSubmitReview = () => {
-    const didNotLeaveReview = Object.values(spotReviews).every(
-      (review) => review.userId !== sessionUser.id
-    );
-    console.log(didNotLeaveReview);
-
-    if (!sessionUser || sessionUser.id === Owner.id || !didNotLeaveReview) return true;
+    if (
+      !sessionUser ||
+      sessionUser.id === Owner.id ||
+      !Object.values(spotReviews).every(
+        (review) => review.userId !== sessionUser.id
+      )
+    )
+      return true;
 
     return false;
   };
@@ -117,6 +120,7 @@ export default () => {
         >
           Post Your Review
         </button>
+        <SpotReviewsComponent />
       </div>
     </>
   );
