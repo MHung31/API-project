@@ -28,7 +28,9 @@ export default ({ reviewDetails }) => {
   const date = createdAt.split("-");
   const year = date[0];
   const month = monthList[date[1]];
-
+  const updateReviewClick = () => {
+    alert("Feature coming soon!");
+  };
   const deleteReviewClick = () => {
     setModalContent(
       <ConfirmDeleteModal
@@ -43,8 +45,16 @@ export default ({ reviewDetails }) => {
       <h4>{firstName}</h4>
       <h5>{`${month} ${year}`}</h5>
       <p>{review}</p>
-      <button hidden={!sessionUser || sessionUser.id !== userId}>Update</button>{" "}
-      <button hidden={!sessionUser || sessionUser.id !== userId} onClick={deleteReviewClick}>
+      <button
+        hidden={!sessionUser || sessionUser.id !== userId}
+        onClick={updateReviewClick}
+      >
+        Update
+      </button>{" "}
+      <button
+        hidden={!sessionUser || sessionUser.id !== userId}
+        onClick={deleteReviewClick}
+      >
         Delete
       </button>
     </div>
