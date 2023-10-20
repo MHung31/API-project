@@ -58,6 +58,12 @@ export default () => {
     } else otherImages.push(image.url);
   });
 
+  const hideSubmitReview = ()=> {
+    if(!sessionUser || sessionUser.id ===Owner.id) return true;
+
+    return false
+  }
+
   return (
     <>
       <div className="details">
@@ -103,7 +109,7 @@ export default () => {
         <button
           id="post-review-button"
           onClick={SubmitReview}
-          hidden={!sessionUser}
+          hidden={hideSubmitReview()}
         >
           Post Your Review
         </button>
