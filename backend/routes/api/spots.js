@@ -443,7 +443,7 @@ router.get("/current", requireAuth, async (req, res) => {
       updatedAt,
     } = spot;
     let avgRating;
-    let imagePreview;
+    let previewImage;
     if (!spot.Reviews.length) {
       avgRating = "There are currently no reviews for this spot";
     } else {
@@ -455,10 +455,10 @@ router.get("/current", requireAuth, async (req, res) => {
     }
 
     if (!spot.Images.length) {
-      imagePreview = "There are currently no images for this spot";
+      previewImage = "There are currently no images for this spot";
     } else {
       spot.Images.forEach((image) =>
-        image.preview === true ? (imagePreview = image.url) : null
+        image.preview === true ? (previewImage = image.url) : null
       );
     }
     return {
@@ -476,7 +476,7 @@ router.get("/current", requireAuth, async (req, res) => {
       createdAt,
       updatedAt,
       avgRating,
-      imagePreview,
+      previewImage,
     };
   });
 
@@ -696,7 +696,7 @@ router.get("/", validateQuery, async (req, res) => {
       updatedAt,
     } = spot;
     let avgRating;
-    let imagePreview;
+    let previewImage;
     if (!spot.Reviews.length) {
       avgRating = "There are currently no reviews for this spot";
     } else {
@@ -708,10 +708,10 @@ router.get("/", validateQuery, async (req, res) => {
     }
 
     if (!spot.Images.length) {
-      imagePreview = "There are currently no images for this spot";
+      previewImage = "There are currently no images for this spot";
     } else {
       spot.Images.forEach((image) =>
-        image.preview === true ? (imagePreview = image.url) : null
+        image.preview === true ? (previewImage = image.url) : null
       );
     }
     return {
@@ -729,7 +729,7 @@ router.get("/", validateQuery, async (req, res) => {
       createdAt,
       updatedAt,
       avgRating,
-      imagePreview,
+      previewImage,
     };
   });
 

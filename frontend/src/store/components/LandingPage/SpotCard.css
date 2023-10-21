@@ -1,0 +1,43 @@
+.previewImage > img {
+  width: 300px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 20px;
+}
+
+.card {
+  width: 300px;
+  height: 300px;
+}
+
+.landing-page-details {
+  display: flex;
+  padding: 5px;
+  color: black;
+}
+
+.location-price {
+  width: 230px;
+}
+.landing-rating {
+  width: 70px;
+  text-align: end;
+}
+
+.spot-name {
+  visibility: hidden;
+  position: relative;
+  height: 0px;
+  top: 220px;
+  left: 10px;
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px black;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.previewImage:hover .spot-name {
+  visibility: visible;
+  opacity: 1;
+}

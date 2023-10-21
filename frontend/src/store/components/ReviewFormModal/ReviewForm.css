@@ -1,0 +1,66 @@
+.review-form > button {
+  margin: 10px 0px;
+  height: 40px;
+  background-color: rgba(255, 0, 0, 0.592);
+  font-weight: bold;
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
+.review-form > button:disabled {
+  background-color: lightgray;
+}
+
+.review-form {
+  border: 5px black solid;
+  border-radius: 10px;
+  background-color: white;
+  width: 400px;
+  height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  padding: 0 20px;
+}
+
+#review-description {
+  resize: none;
+  height: 100px;
+}
+
+#modal-content {
+  background-color: transparent;
+}
+.review-form-rating {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: justify;
+  height: 40px;
+}
+
+.review-form-rating > span {
+  box-sizing: border-box;
+  padding: 15px 10px;
+}
+
+.review-form-rating > i {
+  font-size: 25px;
+  margin: 10px 0;
+  height: 25px;
+  color: black;
+}
+
+#review-form-error {
+  font-size: 15px;
+  color: red;
+  margin: 8 auto;
+  height: 15px;
+}
+.review-form > h2 {
+  margin: 10px auto;
+}

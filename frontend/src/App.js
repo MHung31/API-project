@@ -4,6 +4,10 @@ import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import * as sessionActions from "./store/session";
 import Navigation from "./store/components/Navigation";
+import CreateSpot from "./store/components/CreateSpot";
+import SpotDetails from "./store/components/SpotDetails";
+import LandingPage from "./store/components/LandingPage";
+import SpotReviews from "./store/components/SpotReviews";
 
 function App() {
   const dispatch = useDispatch();
@@ -15,7 +19,21 @@ function App() {
   return (
     <>
       <Navigation isLoaded={isLoaded} />
-      {isLoaded && <Switch></Switch>}
+      {isLoaded && (
+        <Switch>
+          <Route exact path="/">
+            <LandingPage />
+          </Route>
+          <Route path="/spots/new">
+            <CreateSpot />
+          </Route>
+          <Route path="/spots/:id">
+            <SpotDetails />
+            <SpotReviews />
+          </Route>
+        </Switch>
+       
+      )}
     </>
   );
 }

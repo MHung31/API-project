@@ -1,0 +1,96 @@
+.details {
+  margin: 0 auto;
+  width: 1000px;
+  border-bottom: 1px gray solid;
+}
+#review-details-header {
+  margin: 0 auto;
+  width: 1000px;
+}
+.imageList {
+  display: flex;
+}
+
+#previewImage > img {
+  width: 500px;
+  height: 400px;
+  object-fit: cover;
+}
+
+#otherImages > img {
+  width: 250px;
+  height: 200px;
+  object-fit: cover;
+}
+
+img {
+  box-sizing: border-box;
+  padding: 1px;
+}
+
+.spotDetails {
+  display: flex;
+  margin-top: 20px;
+}
+
+.description > h2 {
+  margin-top: 0px;
+}
+
+.description {
+  box-sizing: border-box;
+  padding-right: 20px;
+}
+
+.description {
+  width: 700px;
+}
+
+.reserveDetails {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+.reserve {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 10px 30px;
+  border: black solid 3px;
+  border-radius: 10px;
+  height: 100px;
+  justify-content: center;
+  align-content: center;
+  margin-bottom: 16px;
+}
+
+.reserve > button
+ {
+  margin: 10px 0px;
+  height: 40px;
+  background-color: rgba(255, 0, 0, 0.592);
+  font-weight: bold;
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
+.reserveDetails > div > span {
+  font-size: 12px;
+}
+
+#spot-rating {
+  box-sizing: border-box;
+  padding-top: 3px;
+  font-size: 13px;
+}
+
+#post-review-button {
+  margin-bottom: 20px;
+  background-color: rgb(72, 72, 72);
+  color: white;
+  border: 1px black solid;
+  box-shadow: 2px 2px black;
+  height: 25px;
+}

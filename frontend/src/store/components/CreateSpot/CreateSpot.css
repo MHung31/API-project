@@ -1,0 +1,31 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto;
+}
+
+.form > form > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.location > div {
+  display: flex;
+  flex-direction: column;
+}
+
+#description {
+  width: 400px;
+  resize: none;
+  height: 150px;
+}
+
+.errorMessage {
+  height: 16px;
+  font-size: 14px;
+}
+
+::placeholder {
+  color: rgb(174, 174, 174);
+}
