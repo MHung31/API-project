@@ -1,0 +1,55 @@
+#loginForm {
+  background-color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 20px;
+  height: 300px;
+  width: 350px;
+}
+
+#loginForm > form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#loginForm > h1 {
+  margin: 0px 0px;
+  text-align: center;
+}
+
+#loginForm > form > input {
+  margin-bottom: 15px;
+  border: 3px black solid;
+  height: 30px;
+}
+#loginForm > form > button {
+  height: 40px;
+  background-color: rgba(255, 0, 0, 0.592);
+  font-weight: bold;
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
+#loginForm > h3 {
+  text-align: center;
+  color: teal;
+  text-decoration: underline;
+}
+
+#loginForm > h3:hover,
+#loginForm > form > button {
+  cursor: pointer;
+}
+
+#login-error {
+  color: red;
+  text-align: center;
+  margin: 5px 0px;
+  height: 15px;
+}
+
+#loginForm > form > button:disabled {
+  background-color: lightgray;
+  color: gray;
+}

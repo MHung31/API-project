@@ -122,15 +122,15 @@ export default () => {
   ]);
 
   return (
-    <div className="form">
+    <div className="create-spot-form">
       <form onSubmit={onSubmit}>
-        <h1>Create a new Spot </h1>
+        <h2>Create a new Spot </h2>
         <div className="location">
-          <h2> Where's your place located?</h2>
-          <h3>
+          <h3> Where's your place located?</h3>
+          <p>
             Guests will only get your exact address once they booked a
             reservation.
-          </h3>
+          </p>
 
           <div>
             <label htmlFor="country">
@@ -163,71 +163,82 @@ export default () => {
               placeholder="Address"
             />
           </div>
-          <div>
-            <label htmlFor="city">
-              City{" "}
-              <span className="errorMessage" style={{ color: "red" }}>
-                {submitted && validationErrors.city}
-              </span>
-            </label>
-            <input
-              id="city"
-              type="text"
-              onChange={(e) => setCity(e.target.value)}
-              value={city}
-              placeholder="City"
-            />
-            <label htmlFor="state">
-              State{" "}
-              <span className="errorMessage" style={{ color: "red" }}>
-                {submitted && validationErrors.state}
-              </span>
-            </label>
-            <input
-              id="state"
-              type="text"
-              onChange={(e) => setState(e.target.value)}
-              value={state}
-              placeholder="State"
-            />
-          </div>
-          <div>
-            <label htmlFor="latitude">
-              Latitude{" "}
-              <span className="errorMessage" style={{ color: "red" }}>
-                {submitted && validationErrors.lat}
-              </span>
-            </label>
-            <input
-              id="latitude"
-              type="text"
-              onChange={(e) => setLat(e.target.value)}
-              value={lat}
-              placeholder="Latitude"
-            />
+          <div id="city-state-input">
+            <div>
+              <label htmlFor="city">
+                City{" "}
+                <span className="errorMessage" style={{ color: "red" }}>
+                  {submitted && validationErrors.city}
+                </span>
+              </label>
+              <input
+                id="city"
+                type="text"
+                onChange={(e) => setCity(e.target.value)}
+                value={city}
+                placeholder="City"
+              />{" "}
+              <span></span>
+            </div>
 
-            <label htmlFor="longitude">
-              Longitude{" "}
-              <span className="errorMessage" style={{ color: "red" }}>
-                {submitted && validationErrors.lng}
-              </span>
-            </label>
-            <input
-              id="longitude"
-              type="text"
-              onChange={(e) => setLng(e.target.value)}
-              value={lng}
-              placeholder="Longitude"
-            />
+            <div className="form-comma">{", "}</div>
+            <div>
+              <label htmlFor="state">
+                State{" "}
+                <span className="errorMessage" style={{ color: "red" }}>
+                  {submitted && validationErrors.state}
+                </span>
+              </label>
+              <input
+                id="state"
+                type="text"
+                onChange={(e) => setState(e.target.value)}
+                value={state}
+                placeholder="STATE"
+              />
+            </div>
+          </div>
+          <div id="lat-lng-input">
+            <div>
+              <label htmlFor="latitude">
+                Latitude{" "}
+                <span className="errorMessage" style={{ color: "red" }}>
+                  {submitted && validationErrors.lat}
+                </span>
+              </label>
+              <input
+                id="latitude"
+                type="text"
+                onChange={(e) => setLat(e.target.value)}
+                value={lat}
+                placeholder="Latitude"
+              />
+            </div>
+            <div className="form-comma">{", "}</div>
+            <div>
+              <label htmlFor="longitude">
+                Longitude{" "}
+                <span className="errorMessage" style={{ color: "red" }}>
+                  {submitted && validationErrors.lng}
+                </span>
+              </label>
+              <input
+                id="longitude"
+                type="text"
+                onChange={(e) => setLng(e.target.value)}
+                value={lng}
+                placeholder="Longitude"
+              />
+            </div>
           </div>
         </div>
 
         <div className="create-description">
-          <h2>Describe your place to guests</h2>
-          <h3>
+          <h3>Describe your place to guests</h3>
+          <p>
             Mention the best features of your space, any special amentities like
             fast wifi or parking, and what you love about the neighborhood
-          </h3>
+          </p>
           <div>
             <textarea
               id="description"
@@ -242,11 +253,11 @@ export default () => {
         </div>
 
         <div className="name">
-          <h2>Create a title for your spot</h2>
-          <h3>
+          <h3>Create a title for your spot</h3>
+          <p>
             Catch guests' attention with a spot title that highlights what makes
             your place special.
-          </h3>
+          </p>
           <input
             id="name"
             type="text"
@@ -260,13 +271,13 @@ export default () => {
         </div>
 
         <div className="price">
-          <h2>Set a base price for your spot</h2>
-          <h3>
+          <h3>Set a base price for your spot</h3>
+          <p>
             Competitive pricing can help your listing stand out and rank higher
             in search results.
-          </h3>
+          </p>
           <span>
-            $
+            {'$ '}
             <input
               id="price"
               type="text"
@@ -281,8 +292,8 @@ export default () => {
         </div>
 
         <div className="images">
-          <h2>Liven up your spot with photos</h2>
-          <h3>Submit a link to at least one photo to publish your spot.</h3>
+          <h3>Liven up your spot with photos</h3>
+          <p>Submit a link to at least one photo to publish your spot.</p>
 
           <input
             id="previewImage"
@@ -335,7 +346,9 @@ export default () => {
             {submitted && validationErrors.image4}
           </div>
         </div>
-        <button>Create Spot</button>
+        <div>
+          <button>Create Spot</button>
+        </div>
       </form>
     </div>
   );
