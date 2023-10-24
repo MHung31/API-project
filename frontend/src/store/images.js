@@ -13,16 +13,26 @@ export const addSpotImageThunk = (images, spotId) => async (dispatch) => {
   const response = await csrfFetch(`/api/spots/${spotId}/images`, {
     method: "POST",
     body: JSON.stringify(images[0]),
-  }).then(() => {
+  }).then(async () => {
     if (images.length > 1) {
-      images.slice(1).forEach(async (image) => {
+      const otherImages = images.slice(1)
+      for (let image of otherImages){
+
         await csrfFetch(`/api/spots/${spotId}/images`, {
           method: "POST",
           body: JSON.stringify(image),
         });
-      });
+      }
     }
   });
 };
 
+export const deleteSpotImagesThunk = (imagesArr) => async (dispatch) => {
+
+  for (let imageId of imagesArr) {
+      await csrfFetch(`/api/spot-images/${imageId}`, {
+        method: "DELETE",
+      });
+  }
+};
 //No Reducer needed for images?

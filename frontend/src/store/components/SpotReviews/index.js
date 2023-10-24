@@ -20,7 +20,6 @@ export default () => {
   const order = Object.keys(spotReviews)
     .sort((a, b) => a - b)
     .reverse();
-  console.log(spotReviews, order);
 
   return (
     <div className="reviews">

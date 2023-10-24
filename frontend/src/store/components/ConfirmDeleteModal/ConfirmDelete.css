@@ -1,0 +1,35 @@
+.confirm-delete {
+  background-color: white;
+  border: 5px black solid;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: 15px;
+  width: 350px;
+}
+
+#confirm-yes {
+  margin: 5px 0px;
+  height: 40px;
+  background-color: rgba(255, 0, 0, 0.592);
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
+#confirm-no {
+  margin: 5px 0px;
+  height: 40px;
+  background-color: rgb(72, 72, 72);
+  color: white;
+  box-shadow: 3px 3px black;
+}
+
+.confirm-delete > h3 {
+  text-align: center;
+  margin: 0px 0px;
+}
+
+.confirm-delete > p {
+    margin: 15px 0px;
+  }

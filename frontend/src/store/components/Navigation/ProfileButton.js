@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
@@ -7,6 +7,7 @@ import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 
 function ProfileButton({ user }) {
+  const history = useHistory();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
@@ -35,6 +36,8 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    history.push("/");
+
     closeMenu();
   };
 
@@ -49,14 +52,14 @@ function ProfileButton({ user }) {
       <ul className={ulClassName} ref={ulRef}>
         {user ? (
           <>
-            <li>{`Hello, ${user.firstName}`}</li>
+            <li>{`Hello, ${user.firstName}.`}</li>
             <li>{user.email}</li>
             <li className="profile-separator" />
             <li>
-              <Link to="/spots/current">Manage Spots</Link>
+              <Link to="/spots/current" onClick={closeMenu}>Manage Spots</Link>
             </li>
             <li>
-              <Link to="/reviews/current">Manage Reviews</Link>
+              <Link to="/reviews/current" onClick={closeMenu}>Manage Reviews</Link>
             </li>
             <li className="profile-separator" />
             <li id="logout-button-container">
@@ -66,7 +69,7 @@ function ProfileButton({ user }) {
             </li>
           </>
         ) : (
-          <div id='loginSignup'>
+          <div id="loginSignup">
             <OpenModalMenuItem
               itemText="Log In"
               onItemClick={closeMenu}

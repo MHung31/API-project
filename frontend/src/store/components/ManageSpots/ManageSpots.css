@@ -1,0 +1,27 @@
+.manage-spots {
+  width: 1250px;
+  margin: 20px auto;
+}
+
+.manage-spots-index {
+  display: grid;
+  grid-template-columns: repeat(4, 25%);
+  
+  margin: 20px auto;
+}
+
+.manage-spots button {
+  background-color: rgb(72, 72, 72);
+  color: white;
+  border: 1px black solid;
+  box-shadow: 2px 2px black;
+  height: 25px;
+  margin-right: 15px;
+}
+
+.manage-spots > h2 {
+  margin-bottom: 5px;
+}
+#manage-spots-buttons {
+  margin-bottom: 30px;
+}

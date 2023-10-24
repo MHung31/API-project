@@ -8,6 +8,8 @@ import CreateSpot from "./store/components/CreateSpot";
 import SpotDetails from "./store/components/SpotDetails";
 import LandingPage from "./store/components/LandingPage";
 import SpotReviews from "./store/components/SpotReviews";
+import ManageSpots from "./store/components/ManageSpots";
+import UpdateSpot from "./store/components/UpdateSpot";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,12 +29,17 @@ function App() {
           <Route path="/spots/new">
             <CreateSpot />
           </Route>
+          <Route path="/spots/current">
+            <ManageSpots />
+          </Route>
+          <Route path="/spots/:id/edit">
+            <UpdateSpot />
+          </Route>
           <Route path="/spots/:id">
             <SpotDetails />
             <SpotReviews />
           </Route>
         </Switch>
-       
       )}
     </>
   );

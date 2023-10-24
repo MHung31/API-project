@@ -1,0 +1,105 @@
+.update-spot-form {
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    margin: 0 auto;
+  }
+
+  .update-spot-form > form > div,
+  #city-state-input > div,
+  #lat-lng-input > div,
+  .location > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #description {
+    resize: none;
+    height: 150px;
+    width: 100%;
+  }
+
+  .errorMessage {
+    height: 16px;
+    font-size: 14px;
+    margin: 5px 0px;
+  }
+
+  ::placeholder {
+    color: rgb(174, 174, 174);
+  }
+
+  .update-spot-form > form > h2 {
+    margin: 0px auto;
+  }
+
+  .location > h3,
+  .update-description > h3,
+  .name > h3,
+  .price > h3,
+  .images,
+  h3 {
+    margin-bottom: 0px;
+  }
+
+  .location > p,
+  .update-description > p,
+  .name > p,
+  .price > p,
+  .images > p {
+    margin-top: 5px;
+  }
+
+  .update-spot-form input,
+  .update-spot-form textarea {
+    border: 3px black solid;
+    height: 30px;
+
+  }
+
+  .location input {
+    margin-bottom: 10px;
+  }
+
+  .update-spot-form button {
+    margin: 20px auto;
+    height: 30px;
+    background-color: rgba(255, 0, 0, 0.592);
+    font-weight: bold;
+    color: white;
+    box-shadow: 3px 3px black;
+  }
+
+  .location,
+  .update-description,
+  .name,
+  .price,
+  .images {
+    padding-bottom: 5px;
+    border-bottom: 2px solid black;
+
+  }
+
+  #city-state-input,
+  #lat-lng-input {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .form-comma {
+    margin: 5px 5px 5px 2px;
+    font-size: 20px;
+  }
+
+  .update-spot-form #city {
+    width: 340px;
+  }
+
+  .update-spot-form #state {
+    width: 100%;
+  }
+
+  .update-spot-form #latitude,
+  .update-spot-form #longitude {
+    width: 244px;
+  }
