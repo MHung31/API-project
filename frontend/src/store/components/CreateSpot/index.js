@@ -49,7 +49,7 @@ export default () => {
     if (image4) images.push({ url: image4, preview: false });
 
     if (!Object.keys(validationErrors).length) {
-      const response = await dispatch(newSpotThunk(newSpot)).then((res) => {
+       await dispatch(newSpotThunk(newSpot)).then((res) => {
         if (res.errors && Object.values(res.errors).length) {
           setValidationErrors(res.errors);
         } else {
@@ -61,6 +61,7 @@ export default () => {
       });
     }
   };
+
 
   useEffect(() => {
     const errors = {};
