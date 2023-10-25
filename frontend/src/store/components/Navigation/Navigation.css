@@ -41,6 +41,8 @@ a {
   right: 17px;
   display: flex;
   flex-direction: column;
+  width: 150px;
+  word-wrap: break-word;
 }
 
 .profile-dropdown > li > a {

@@ -56,11 +56,15 @@ function ProfileButton({ user }) {
             <li>{user.email}</li>
             <li className="profile-separator" />
             <li>
-              <Link to="/spots/current" onClick={closeMenu}>Manage Spots</Link>
+              <Link to="/spots/current" onClick={closeMenu}>
+                Manage Spots
+              </Link>
             </li>
-            <li>
-              <Link to="/reviews/current" onClick={closeMenu}>Manage Reviews</Link>
-            </li>
+            {/* <li>
+              <Link to="/reviews/current" onClick={closeMenu}>
+                Manage Reviews
+              </Link>
+            </li> */}
             <li className="profile-separator" />
             <li id="logout-button-container">
               <button id="logout-button" onClick={logout}>
@@ -71,14 +75,14 @@ function ProfileButton({ user }) {
         ) : (
           <div id="loginSignup">
             <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
               itemText="Sign Up"
               onItemClick={closeMenu}
               modalComponent={<SignupFormModal />}
+            />
+            <OpenModalMenuItem
+              itemText="Log In"
+              onItemClick={closeMenu}
+              modalComponent={<LoginFormModal />}
             />
           </div>
         )}

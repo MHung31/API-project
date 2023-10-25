@@ -1,5 +1,5 @@
 .reviews {
-  margin: 0 auto;
+  margin: 10px auto;
   width: 1000px;
 }
 
@@ -16,7 +16,7 @@
 }
 
 .userReview {
-  margin-bottom: 30px;
+  margin: 15px 0px;
 }
 
 

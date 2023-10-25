@@ -6,12 +6,15 @@ import { addSpotDetailsThunk } from "../../spotsDetails";
 import OpenModalMenuItem from "../OpenModalButton";
 import ReviewFormModal from "../ReviewFormModal";
 import { useModal } from "../../../context/Modal";
+import SpotReviewsComponent from "../SpotReviews";
 
 export default () => {
+  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
   const { setModalContent, setOnModalClose } = useModal();
   const { id } = useParams();
   const spotDetails = useSelector((state) => state.spotsDetails[id]);
+  const spotReviews = useSelector((state) => state.reviews);
   let previewImage = "";
   const otherImages = [];
 
@@ -25,7 +28,7 @@ export default () => {
 
   useEffect(() => {
     dispatch(addSpotDetailsThunk(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, spotReviews]);
 
   if (!spotDetails) return <div></div>;
 
@@ -55,6 +58,19 @@ export default () => {
     } else otherImages.push(image.url);
   });
 
+  const hideSubmitReview = () => {
+    if (
+      !sessionUser ||
+      sessionUser.id === Owner.id ||
+      !Object.values(spotReviews).every(
+        (review) => review.userId !== sessionUser.id
+      )
+    )
+      return true;
+
+    return false;
+  };
+
   return (
     <>
       <div className="details">
@@ -66,7 +82,7 @@ export default () => {
             <img src={previewImage} alt="Preview Image" />
           </div>
           <div id="otherImages">
-            {otherImages.map( (image) => {
+            {otherImages.map((image) => {
               return <img src={image} alt="No Image" />;
             })}
           </div>
@@ -97,9 +113,14 @@ export default () => {
         <h3>
           <i class="fa-solid fa-star" /> {rating}
         </h3>
-        <button id="post-review-button" onClick={SubmitReview}>
+        <button
+          id="post-review-button"
+          onClick={SubmitReview}
+          hidden={hideSubmitReview()}
+        >
           Post Your Review
         </button>
+        <SpotReviewsComponent />
       </div>
     </>
   );

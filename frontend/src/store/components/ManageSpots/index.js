@@ -25,11 +25,9 @@ export default () => {
 
   const deleteClick = (id) => {
     return function () {
-      //Pass delete thunk and ID to confirm delete modal
-      //delete it from redux store and also call to remove it from db
-      //add useEffect to rerender if number of spots are different
+
       setModalContent(<ConfirmDeleteModal type='Spot' deleteFunc={deleteSpotThunk} id={id}/>)
-    
+
     };
   };
 

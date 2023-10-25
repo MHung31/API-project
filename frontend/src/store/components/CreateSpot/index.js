@@ -54,25 +54,27 @@ export default () => {
         setValidationErrors(response.errors);
       } else {
         const spotId = response.id;
-        dispatch(addSpotImageThunk(images, spotId));
+        dispatch(addSpotImageThunk(images, spotId)).then(() =>
+          history.push(`/spots/${spotId}`)
+        );
 
-        setValidationErrors({});
-        setAddress("");
-        setCity("");
-        setState("");
-        setCountry("");
-        setLat("");
-        setLng("");
-        setName("");
-        setDescription("");
-        setPrice("");
-        setSubmitted(false);
-        setPreviewImage("");
-        setImage1("");
-        setImage2("");
-        setImage3("");
-        setImage4("");
-        history.push(`/spots/${spotId}`);
+        // setValidationErrors({});
+        // setAddress("");
+        // setCity("");
+        // setState("");
+        // setCountry("");
+        // setLat("");
+        // setLng("");
+        // setName("");
+        // setDescription("");
+        // setPrice("");
+        // setSubmitted(false);
+        // setPreviewImage("");
+        // setImage1("");
+        // setImage2("");
+        // setImage3("");
+        // setImage4("");
+
         // setButton(true);
       }
     }
@@ -236,8 +238,8 @@ export default () => {
         <div className="create-description">
           <h3>Describe your place to guests</h3>
           <p>
-            Mention the best features of your space, any special amentities like
-            fast wifi or parking, and what you love about the neighborhood
+            Mention the best features of your space, any special amenities like
+            fast wifi or parking, and what you love about the neighborhood.
           </p>
           <div>
             <textarea
@@ -277,7 +279,7 @@ export default () => {
             in search results.
           </p>
           <span>
-            {'$ '}
+            {"$ "}
             <input
               id="price"
               type="text"

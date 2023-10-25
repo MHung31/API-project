@@ -29,8 +29,10 @@ function LoginFormModal() {
     }
   };
 
-  const demoUser = (e) => {
-    alert("Feature coming soon");
+  const demoUser = () => {
+    dispatch(sessionActions.login({credential: "demo@user.io", password: "password" }));
+    closeModal();
+    history.push("/");
   };
 
   useEffect(() => {
@@ -41,7 +43,7 @@ function LoginFormModal() {
 
   return (
     <div id="loginForm">
-      <h1>Log In</h1>
+      <h2>Log In</h2>
       <form onSubmit={handleSubmit}>
         <div id="login-error">{errors}</div>
         <label>Username or Email</label>
