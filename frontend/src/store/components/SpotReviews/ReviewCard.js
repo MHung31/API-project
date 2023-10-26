@@ -27,7 +27,8 @@ export default ({ reviewDetails }) => {
   const { firstName } = reviewDetails.User;
   const date = createdAt.split("-");
   const year = date[0];
-  const month = monthList[date[1]];
+  //check the month
+  const month = monthList.at([Number(date[1]) - 1]);
   const updateReviewClick = () => {
     alert("Feature coming soon!");
   };
