@@ -1,6 +1,7 @@
 <!--!!START SILENT -->
 
 # AirBnB Clone
+[Check out my live site](https://airbnb-project-i73g.onrender.com/)
 
 <!--!!END -->
 <!--!!ADD -->
